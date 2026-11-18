@@ -153,7 +153,6 @@ const $=id=>document.getElementById(id);
 const touch=matchMedia('(pointer:coarse)').matches;
 const mob=()=>innerWidth<=820;
 if(touch)document.body.classList.add('osk');
-if(mob())$('size').value='8';
 let cells,entries,sel,lastW=innerWidth;
 function maxCols(){return mob()?Math.max(9,Math.min(16,Math.floor((innerWidth-24)/27))):44}
 function build(){
