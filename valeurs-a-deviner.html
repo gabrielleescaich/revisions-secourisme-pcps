@@ -22,12 +22,14 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-of
 .btns{display:flex;flex-wrap:wrap;gap:8px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
 .card h2{font-size:1.05rem;margin:0;text-wrap:balance}
-.line{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0}
-input.n{width:4.2em;font:inherit;font-variant-numeric:tabular-nums;text-align:center;padding:7px 4px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);min-height:42px}
+.line{display:flex;flex-wrap:nowrap;white-space:nowrap;align-items:center;gap:.35em;min-width:0;font-size:16px}
+.line>span{flex:none}
+input.n{width:2.6em;font:inherit;font-variant-numeric:tabular-nums;text-align:center;padding:7px 0;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);min-height:42px}
 input.n.ok{border-color:var(--ok);background:var(--okbg);color:var(--ok);font-weight:600}
 input.n.ko{border-color:var(--ko);background:var(--kobg);color:var(--ko)}
 .sol{font-size:.8rem;color:var(--ko);font-variant-numeric:tabular-nums}
-.col{display:inline-flex;flex-direction:column;align-items:center;gap:2px}
+.col{flex:none;display:inline-flex;flex-direction:column;align-items:center;gap:2px}
+@media(max-width:480px){.card{padding:14px 10px}}
 </style>
 </head>
 <body>
@@ -105,7 +107,7 @@ function build(){
  });
  score();
 }
-function score(t){document.getElementById('sc').textContent=t||('0 / '+inputs.length+' valeurs');}
+function score(t){setTimeout(()=>window.fit&&fit(),0);document.getElementById('sc').textContent=t||('0 / '+inputs.length+' valeurs');}
 document.getElementById('chk').onclick=()=>{
  let ok=0;
  inputs.forEach(e=>{
@@ -128,6 +130,10 @@ document.getElementById('rev').onclick=()=>{
 };
 document.getElementById('rst').onclick=build;
 build();
+
+function fit(){const L=[...document.querySelectorAll('.line')];let m=16;L.forEach(l=>{let f=16;l.style.fontSize=f+'px';while(l.scrollWidth>l.clientWidth+1&&f>8){f-=.5;l.style.fontSize=f+'px';}m=Math.min(m,f);});L.forEach(l=>l.style.fontSize=m+'px');}
+addEventListener('resize',fit);
+fit();
 </script>
 </body>
 </html>
