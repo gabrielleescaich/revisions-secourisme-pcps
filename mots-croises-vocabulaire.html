@@ -6,48 +6,60 @@
 <title>Mots croisés – Vocabulaire médical</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#f6f4ef;--surf:#fff;--ink:#1d2433;--mut:#667085;--line:#c9cdd6;--blk:#1d2433;--acc:#c8322b;--accs:#fbe3e1;--wd:#fff1c9;--ok:#1f7a4d;--bad:#b42318;--badbg:#fde4e1;
+--bg:#f6f4ef;--surf:#fff;--ink:#1d2433;--mut:#667085;--line:#c9cdd6;--blk:#1d2433;--acc:#c8322b;--accs:#fbe3e1;--wd:#fff1c9;--ok:#1f7a4d;--bad:#b42318;--badbg:#fde4e1;--key:#e4e6ec;
 color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--surf:#1d212c;--ink:#eceef3;--mut:#9aa3b5;--line:#3a4152;--blk:#0b0d12;--acc:#ff6b61;--accs:#4a2522;--wd:#3d3519;--ok:#5ad19a;--bad:#ff8a80;--badbg:#4a2522;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#14171f;--surf:#1d212c;--ink:#eceef3;--mut:#9aa3b5;--line:#3a4152;--blk:#0b0d12;--acc:#ff6b61;--accs:#4a2522;--wd:#3d3519;--ok:#5ad19a;--bad:#ff8a80;--badbg:#4a2522;color-scheme:dark}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--surf:#1d212c;--ink:#eceef3;--mut:#9aa3b5;--line:#3a4152;--blk:#0b0d12;--acc:#ff6b61;--accs:#4a2522;--wd:#3d3519;--ok:#5ad19a;--bad:#ff8a80;--badbg:#4a2522;--key:#2c3242;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14171f;--surf:#1d212c;--ink:#eceef3;--mut:#9aa3b5;--line:#3a4152;--blk:#0b0d12;--acc:#ff6b61;--accs:#4a2522;--wd:#3d3519;--ok:#5ad19a;--bad:#ff8a80;--badbg:#4a2522;--key:#2c3242;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:1100px;margin:0 auto;padding:16px}
-h1{font-size:1.4rem;margin:0 0 4px}
-.sub{color:var(--mut);margin:0 0 14px}
-.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
-button,select{font:inherit;color:var(--ink);background:var(--surf);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer}
+body.osk{padding-bottom:calc(215px + env(safe-area-inset-bottom,0px))}
+main{max-width:1100px;margin:0 auto;padding:12px 12px 16px}
+h1{font-size:1.25rem;margin:0 0 2px}
+.sub{color:var(--mut);margin:0 0 10px;font-size:.9rem}
+button,select{font:inherit;color:var(--ink);background:var(--surf);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer;touch-action:manipulation}
 button:hover{border-color:var(--acc)}
 button.p{background:var(--acc);border-color:var(--acc);color:#fff}
+#tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
 .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
-@media (max-width:820px){.layout{grid-template-columns:1fr}}
-#cur{background:var(--surf);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:8px;padding:10px 12px;margin-bottom:12px;min-height:3.2em}
-#cur b{color:var(--acc)}
+@media (max-width:820px){.layout{grid-template-columns:1fr;gap:12px}#tools{display:none}#tools.show{display:flex}.sub{display:none}}
+#cur{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;align-items:stretch;gap:6px;background:var(--bg);padding:4px 0 8px}
+#cur button{flex:none;width:44px;font-size:1.1rem;padding:0}
+#ct{flex:1;background:var(--surf);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:8px;padding:6px 10px;min-height:56px;display:flex;flex-direction:column;justify-content:center;font-size:.95rem;line-height:1.25}
+#ct b{color:var(--acc);font-size:.8rem;text-transform:uppercase;letter-spacing:.03em}
+#msg{font-weight:600;color:var(--ok);margin:0 0 6px;min-height:0}
 .gw{overflow-x:auto;padding-bottom:6px}
-#grid{display:grid;width:max-content;gap:1px;background:var(--line);border:1px solid var(--line);margin:0 auto}
-.c{width:var(--cs);height:var(--cs);position:relative;background:var(--surf);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;font-weight:600;font-size:calc(var(--cs)*.5)}
+#grid{display:grid;width:max-content;gap:1px;background:var(--line);border:1px solid var(--line);margin:0 auto;touch-action:manipulation}
+.c{width:var(--cs);height:var(--cs);position:relative;background:var(--surf);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;font-weight:600;font-size:calc(var(--cs)*.52)}
 .k{background:var(--blk);cursor:default}
-.c .n{position:absolute;top:1px;left:2px;font-size:calc(var(--cs)*.28);font-weight:500;color:var(--mut);line-height:1}
+.c .n{position:absolute;top:1px;left:2px;font-size:max(7px,calc(var(--cs)*.28));font-weight:500;color:var(--mut);line-height:1}
 .c.w{background:var(--wd)}
 .c.cur{background:var(--accs);outline:2px solid var(--acc);outline-offset:-2px;z-index:1}
 .c.bad{background:var(--badbg);color:var(--bad)}
-.c.ok{color:var(--ok)}
+details.cl>summary{cursor:pointer;font-weight:600;padding:10px 12px;background:var(--surf);border:1px solid var(--line);border-radius:8px;list-style:none}
+details.cl[open]>summary{margin-bottom:8px}
+@media (min-width:821px){details.cl>summary{display:none}}
 .cl h2{font-size:1rem;margin:0 0 6px;color:var(--acc)}
-.cl ol{list-style:none;margin:0 0 16px;padding:0;max-height:42vh;overflow:auto}
-.cl li{display:flex;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:.92rem}
+.cl ol{list-style:none;margin:0 0 14px;padding:0;max-height:42vh;overflow:auto}
+.cl li{display:flex;gap:8px;padding:8px;border-radius:6px;cursor:pointer;font-size:.95rem}
 .cl li:hover{background:var(--accs)}
 .cl li.on{background:var(--wd);outline:1px solid var(--acc)}
-.cl li b{min-width:1.6em;text-align:right;color:var(--mut)}
-#msg{margin:10px 0;font-weight:600;color:var(--ok);min-height:1.4em}
+.cl li b{min-width:1.8em;text-align:right;color:var(--mut)}
+@media (max-width:820px){.cl ol{max-height:none}}
 #kb{position:fixed;opacity:0;pointer-events:none;left:-100px;top:0;width:1px;height:1px}
+#osk{display:none;position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--bg);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+body.osk #osk{display:block}
+#osk .r{display:flex;gap:4px;margin-bottom:5px}
+#osk button{flex:1;height:44px;padding:0;font-size:1.1rem;font-weight:600;background:var(--key);border-color:transparent;border-radius:6px;user-select:none;-webkit-user-select:none}
+#osk button.w15{flex:1.5}
+#osk .ra button{font-size:.9rem;font-weight:500;background:var(--surf);border-color:var(--line);height:38px}
+#osk button:active{background:var(--accs)}
 </style>
 </head>
 <body>
 <main>
 <h1>Mots croisés : vocabulaire médical</h1>
 <p class="sub">Trouve le terme correspondant à chaque définition. Accents et tirets ne comptent pas (Latéro-thoracique s’écrit LATEROTHORACIQUE).</p>
-<div class="bar">
+<div id="tools">
 <label>Taille <select id="size"><option value="8">Courte (8 mots)</option><option value="12">Moyenne (12 mots)</option><option value="18" selected>Complète (18 mots)</option></select></label>
 <button class="p" id="new">Nouvelle grille</button>
 <button id="chk">Vérifier</button>
@@ -57,30 +69,41 @@ button.p{background:var(--acc);border-color:var(--acc);color:#fff}
 </div>
 <div class="layout">
 <section>
-<div id="cur"></div>
-<div class="gw"><div id="grid" role="grid" aria-label="Grille de mots croisés"></div></div>
+<div id="cur"><button id="pv" aria-label="Définition précédente">◀</button><div id="ct" aria-live="polite"></div><button id="nx" aria-label="Définition suivante">▶</button></div>
 <div id="msg" aria-live="polite"></div>
+<div class="gw"><div id="grid" role="grid" aria-label="Grille de mots croisés"></div></div>
 </section>
-<aside class="cl">
+<aside>
+<details class="cl" id="defs" open><summary>Toutes les définitions</summary>
 <h2>Horizontalement</h2><ol id="lh"></ol>
 <h2>Verticalement</h2><ol id="lv"></ol>
+</details>
 </aside>
 </div>
-<input id="kb" autocomplete="off" autocapitalize="characters" aria-hidden="true" tabindex="-1">
 </main>
+<div id="osk" role="group" aria-label="Clavier">
+<div class="r ra"><button data-a="chk">Vérifier</button><button data-a="hint">Indice</button><button data-a="opt">Options</button></div>
+<div class="r" data-r="AZERTYUIOP"></div>
+<div class="r" data-r="QSDFGHJKLM"></div>
+<div class="r" data-r="↔WXCVBN⌫"></div>
+</div>
+<input id="kb" autocomplete="off" autocapitalize="characters" aria-hidden="true" tabindex="-1">
 <script>
 const WORDS=[{"a": "VASODILATATION", "q": "Augmentation de la taille des vaisseaux sanguins (veines et artères)"}, {"a": "ICTERE", "q": "Coloration jaune de la peau et des muqueuses"}, {"a": "MYOSIS", "q": "Contraction de la pupille"}, {"a": "LATEROTHORACIQUE", "q": "Côté du thorax"}, {"a": "RETROSTERNAL", "q": "Derrière le sternum"}, {"a": "MYDRIASE", "q": "Dilatation de la pupille"}, {"a": "EPISTAXIS", "q": "Ecoulement de sang par le nez"}, {"a": "OTTORAGIE", "q": "Ecoulement de sang par les oreilles"}, {"a": "PRIAPISME", "q": "Erection non controlée et ne cédant pas"}, {"a": "HYPEROXIE", "q": "Augmentation trop importante de la concentration d’oxygène dans le sang"}, {"a": "HYPOXIE", "q": "Manque d’oxygène / baisse trop importante de la quantité d’oxygène dans le sang"}, {"a": "HEMOSTASE", "q": "Mécanismes d’arrêt du saignement du corps humain"}, {"a": "MEDIOTHORACIQUE", "q": "Milieu du thorax"}, {"a": "ANISOCORIE", "q": "Pupilles de taille asymétrique"}, {"a": "ANAPHYLAXIE", "q": "Réaction allergique grave"}, {"a": "PRECORDIAL", "q": "Région du thorax située en avant du coeur"}, {"a": "TRANSFIXIANTE", "q": "Traversant"}, {"a": "ARYTHMIE", "q": "Variation du rythme cardiaque"}];
 //GEN-START
+
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function generate(words,target,ms){
-  const N=44,t0=Date.now();let best=null;
+function generate(words,target,ms,maxC){
+  maxC=maxC||44;const N=44,t0=Date.now();let best=null;
   do{
     const g=Array.from({length:N},()=>Array(N).fill(''));
+    let lo=0,hi=0;
     const at=(r,c)=>(r<0||c<0||r>=N||c>=N)?'':g[r][c];
     const fit=(w,r,c,d)=>{
       const dr=d,dc=1-d,L=w.length;
       if(r<0||c<0||r+dr*L>N||c+dc*L>N)return -1;
       if(at(r-dr,c-dc)||at(r+dr*L,c+dc*L))return -1;
+      if(Math.max(hi,c+(1-d)*(L-1))-Math.min(lo,c)+1>maxC)return -1;
       let x=0;
       for(let i=0;i<L;i++){
         const rr=r+dr*i,cc=c+dc*i,ch=at(rr,cc);
@@ -89,11 +112,12 @@ function generate(words,target,ms){
       }
       return x;
     };
-    const put=(e)=>{for(let i=0;i<e.a.length;i++)g[e.r+e.d*i][e.c+(1-e.d)*i]=e.a[i]};
+    const put=(e)=>{lo=Math.min(lo,e.c);hi=Math.max(hi,e.c+(1-e.d)*(e.a.length-1));for(let i=0;i<e.a.length;i++)g[e.r+e.d*i][e.c+(1-e.d)*i]=e.a[i]};
     const pool=shuffle(words.slice()).map(w=>[w,w.a.length+Math.random()*3]).sort((x,y)=>y[1]-x[1]).map(x=>x[0]);
     const placed=[];
     const first=pool.shift();
-    const e0={...first,r:N>>1,c:(N-first.a.length)>>1,d:0};put(e0);placed.push(e0);
+    const d0=first.a.length>maxC?1:0,L0=first.a.length;
+    const e0={...first,r:d0?(N-L0)>>1:N>>1,c:d0?N>>1:(N-L0)>>1,d:d0};lo=hi=e0.c;put(e0);placed.push(e0);
     for(let pass=0;pass<3&&placed.length<target;pass++){
       for(let k=0;k<pool.length&&placed.length<target;k++){
         const w=pool[k];let bs=0,cand=[];
@@ -123,11 +147,17 @@ function generate(words,target,ms){
   }while(Date.now()-t0<ms);
   return best;
 }
+
 //GEN-END
 const $=id=>document.getElementById(id);
-let cells,entries,sel;
+const touch=matchMedia('(pointer:coarse)').matches;
+const mob=()=>innerWidth<=820;
+if(touch)document.body.classList.add('osk');
+if(mob())$('size').value='8';
+let cells,entries,sel,lastW=innerWidth;
+function maxCols(){return mob()?Math.max(9,Math.min(16,Math.floor((innerWidth-24)/27))):44}
 function build(){
-  const b=generate(WORDS,+$('size').value,1500);
+  const b=generate(WORDS,+$('size').value,1500,maxCols());
   cells=Array.from({length:b.R},()=>Array.from({length:b.C},()=>null));
   entries=b.placed.map(e=>({a:e.a,clue:e.q,r:e.r-b.r0,c:e.c-b.c0,d:e.d,len:e.a.length}));
   entries.forEach((e,i)=>{for(let k=0;k<e.len;k++){
@@ -143,13 +173,14 @@ function build(){
   }
   render();
   const f=entries.filter(e=>e.d===0).sort((p,q)=>p.n-q.n)[0]||entries[0];
-  select(f.r,f.c,f.d);
+  sel={r:f.r,c:f.c,d:f.d};paint();
   $('msg').textContent='';
+  $('defs').querySelector('summary').textContent='Toutes les définitions ('+entries.length+')';
 }
 function render(){
-  const R=cells.length,C=cells[0].length;
-  const w=Math.min(innerWidth,1100)-(innerWidth>820?400:32);
-  const cs=Math.max(28,Math.min(42,Math.floor(w/C)));
+  const R=cells.length,C=cells[0].length,m=mob();
+  const avail=m?innerWidth-26:Math.min(innerWidth,1100)-400;
+  const cs=Math.max(m?22:28,Math.min(m?40:42,Math.floor((avail-C)/C)));
   const g=$('grid');g.style.setProperty('--cs',cs+'px');
   g.style.gridTemplateColumns=`repeat(${C},${cs}px)`;
   g.innerHTML='';
@@ -164,18 +195,22 @@ function render(){
     entries.map((e,i)=>[e,i]).filter(([e])=>e.d===d).sort((p,q)=>p[0].n-q[0].n).forEach(([e,i])=>{
       const li=document.createElement('li');li.dataset.i=i;
       li.innerHTML=`<b>${e.n}</b><span>${e.clue}</span>`;
-      li.onclick=()=>{select(e.r,e.c,e.d);$('kb').focus()};
+      li.onclick=()=>{goEntry(e);if(mob()){$('defs').open=false;const t=document.querySelector('.gw').getBoundingClientRect().top+scrollY-$('cur').offsetHeight-8;scrollTo({top:Math.max(0,t),behavior:'smooth'})}focusKb()};
       ol.appendChild(li);
     });
   }
 }
 const el=(r,c)=>$('grid').children[r*cells[0].length+c];
-function wordCells(){const e=entries[cells[sel.r][sel.c].e[sel.d]];const o=[];for(let k=0;k<e.len;k++)o.push([e.r+e.d*k,e.c+(1-e.d)*k]);return o}
+const focusKb=()=>{if(!touch)$('kb').focus()};
+const ent=()=>entries[cells[sel.r][sel.c].e[sel.d]];
+function wordCells(e=ent()){const o=[];for(let k=0;k<e.len;k++)o.push([e.r+e.d*k,e.c+(1-e.d)*k]);return o}
+function goEntry(e){const w=wordCells(e),t=w.find(([r,c])=>!cells[r][c].v)||w[0];sel={r:t[0],c:t[1],d:e.d};paint()}
 function select(r,c,d){
-  const x=cells[r][c];if(!x)return;
-  if(x.e[d]<0)d=1-d;
+  if(!cells[r][c])return;
+  if(cells[r][c].e[d]<0)d=1-d;
   sel={r,c,d};paint();
 }
+function toggleDir(){if(cells[sel.r][sel.c].e[1-sel.d]>=0){sel.d=1-sel.d;paint()}}
 function paint(){
   const R=cells.length,C=cells[0].length;
   for(let r=0;r<R;r++)for(let c=0;c<C;c++){
@@ -187,32 +222,56 @@ function paint(){
   wordCells().forEach(([r,c])=>el(r,c).classList.add('w'));
   el(sel.r,sel.c).classList.add('cur');
   const i=cells[sel.r][sel.c].e[sel.d],e=entries[i];
-  $('cur').innerHTML=`<b>${e.n} ${e.d?'Verticalement':'Horizontalement'}</b><br>${e.clue}`;
+  $('ct').innerHTML=`<b>${e.n} · ${e.d?'Vertical':'Horizontal'}</b><span>${e.clue}</span>`;
   document.querySelectorAll('.cl li').forEach(li=>li.classList.toggle('on',+li.dataset.i===i));
-  const on=document.querySelector('.cl li.on');if(on)on.scrollIntoView({block:'nearest'});
+  const on=document.querySelector('.cl li.on');if(on&&$('defs').open&&!mob())on.scrollIntoView({block:'nearest'});
+  keepVisible();
+}
+function keepVisible(){
+  const t=el(sel.r,sel.c).getBoundingClientRect();
+  const top=$('cur').getBoundingClientRect().bottom+6;
+  const bot=(document.body.classList.contains('osk')?$('osk').getBoundingClientRect().top:innerHeight)-6;
+  if(t.top<top)scrollBy(0,t.top-top);else if(t.bottom>bot)scrollBy(0,t.bottom-bot);
 }
 function move(step){
   const w=wordCells(),k=w.findIndex(([r,c])=>r===sel.r&&c===sel.c)+step;
   if(k>=0&&k<w.length){sel.r=w[k][0];sel.c=w[k][1]}
 }
+function ordered(){return entries.map((e,i)=>i).sort((a,b)=>entries[a].d-entries[b].d||entries[a].n-entries[b].n)}
 function nextWord(step){
-  const list=entries.map((e,i)=>i).sort((a,b)=>entries[a].d-entries[b].d||entries[a].n-entries[b].n);
-  const cur=cells[sel.r][sel.c].e[sel.d];
-  const e=entries[list[(list.indexOf(cur)+step+list.length)%list.length]];
-  sel={r:e.r,c:e.c,d:e.d};
+  const list=ordered(),cur=cells[sel.r][sel.c].e[sel.d];
+  goEntry(entries[list[(list.indexOf(cur)+step+list.length)%list.length]]);
+}
+function jumpNext(){
+  const list=ordered(),cur=cells[sel.r][sel.c].e[sel.d];
+  for(let s=1;s<list.length;s++){
+    const e=entries[list[(list.indexOf(cur)+s)%list.length]];
+    if(wordCells(e).some(([r,c])=>!cells[r][c].v)){goEntry(e);return}
+  }
 }
 function type(ch){
-  const x=cells[sel.r][sel.c];x.v=ch;x.bad=false;move(1);paint();win();
+  const x=cells[sel.r][sel.c];x.v=ch;x.bad=false;
+  const w=wordCells(),k=w.findIndex(([r,c])=>r===sel.r&&c===sel.c);
+  if(k<w.length-1)move(1);
+  else if(w.every(([r,c])=>cells[r][c].v))jumpNext();
+  paint();win();
+}
+function back(){
+  const x=cells[sel.r][sel.c];
+  if(x.v){x.v='';x.bad=false}else{move(-1);const y=cells[sel.r][sel.c];y.v='';y.bad=false}
+  paint();
 }
 function win(){
   const ok=cells.every(row=>row.every(x=>!x||x.v===x.ch));
   $('msg').textContent=ok?'Bravo, la grille est complète !':'';
 }
+function check(){cells.forEach(row=>row.forEach(x=>{if(x)x.bad=!!x.v&&x.v!==x.ch}));paint()}
+function hint(){const x=cells[sel.r][sel.c];x.v=x.ch;x.bad=false;move(1);paint();win()}
 $('grid').addEventListener('click',ev=>{
   const t=ev.target.closest('.c');if(!t||t.classList.contains('k'))return;
   const r=+t.dataset.r,c=+t.dataset.c;
-  if(sel.r===r&&sel.c===c&&cells[r][c].e[1-sel.d]>=0)select(r,c,1-sel.d);else select(r,c,sel.d);
-  $('kb').focus();
+  if(sel.r===r&&sel.c===c)toggleDir();else select(r,c,sel.d);
+  focusKb();
 });
 $('kb').addEventListener('input',ev=>{
   const v=ev.target.value.toUpperCase().replace(/[^A-Z0-9]/g,'');ev.target.value='';
@@ -220,8 +279,8 @@ $('kb').addEventListener('input',ev=>{
 });
 $('kb').addEventListener('keydown',ev=>{
   const k=ev.key;
-  if(k==='Backspace'){ev.preventDefault();const x=cells[sel.r][sel.c];if(x.v){x.v='';x.bad=false}else move(-1);paint()}
-  else if(k==='Tab'){ev.preventDefault();nextWord(ev.shiftKey?-1:1);paint()}
+  if(k==='Backspace'){ev.preventDefault();back()}
+  else if(k==='Tab'){ev.preventDefault();nextWord(ev.shiftKey?-1:1)}
   else if(k.startsWith('Arrow')){
     ev.preventDefault();
     const dr=k==='ArrowDown'?1:k==='ArrowUp'?-1:0,dc=k==='ArrowRight'?1:k==='ArrowLeft'?-1:0;
@@ -230,13 +289,30 @@ $('kb').addEventListener('keydown',ev=>{
     if(cells[r]&&cells[r][c])select(r,c,dr?1:0);
   }
 });
-$('new').onclick=()=>{build();$('kb').focus()};
+document.querySelectorAll('#osk .r[data-r]').forEach(row=>{
+  for(const ch of row.dataset.r){
+    const b=document.createElement('button');b.type='button';b.textContent=ch;
+    if(ch==='↔'){b.classList.add('w15');b.setAttribute('aria-label','Changer de sens');b.onclick=toggleDir}
+    else if(ch==='⌫'){b.classList.add('w15');b.setAttribute('aria-label','Effacer la lettre');b.onclick=back}
+    else b.onclick=()=>type(ch);
+    b.addEventListener('mousedown',e=>e.preventDefault());
+    row.appendChild(b);
+  }
+});
+document.querySelectorAll('#osk [data-a]').forEach(b=>b.onclick=()=>{
+  const a=b.dataset.a;
+  if(a==='chk')check();else if(a==='hint')hint();else $('tools').classList.toggle('show');
+});
+$('pv').onclick=()=>{nextWord(-1);focusKb()};
+$('nx').onclick=()=>{nextWord(1);focusKb()};
+$('new').onclick=()=>{build();focusKb()};
 $('size').onchange=build;
-$('chk').onclick=()=>{cells.forEach(row=>row.forEach(x=>{if(x)x.bad=!!x.v&&x.v!==x.ch}));paint()};
-$('hint').onclick=()=>{const x=cells[sel.r][sel.c];x.v=x.ch;x.bad=false;move(1);paint();win()};
+$('chk').onclick=check;
+$('hint').onclick=hint;
 $('rev').onclick=()=>{cells.forEach(row=>row.forEach(x=>{if(x){x.v=x.ch;x.bad=false}}));paint();win()};
 $('clr').onclick=()=>{cells.forEach(row=>row.forEach(x=>{if(x){x.v='';x.bad=false}}));paint();$('msg').textContent=''};
-let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(cells){const s={...sel};render();sel=s;paint()}},200)});
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(cells&&innerWidth!==lastW){lastW=innerWidth;const s={...sel};render();sel=s;paint()}},200)});
+if(mob())$('defs').open=false;
 build();
 </script>
 </body>
