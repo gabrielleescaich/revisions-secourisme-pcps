@@ -77,7 +77,241 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
  </div>
 </main>
 <script>
-const DATA=[{"cat": "Opérationnel", "items": [{"q": "Signes d'une hypothermie légère", "a": ["Victime consciente", "Ventilation et FC rapides", "Frissons permanents", "Peau froide"]}, {"q": "Signes d'une hypothermie modérée", "a": ["Délire, hallucinations, troubles de la conscience d'aggravation progressive", "Ventilation et FC ralenties", "Frissons disparus, rigidité musculaire modérée"]}, {"q": "Signes d'une hypothermie sévère", "a": ["Victime inconsciente", "Pouls difficile à percevoir", "Ventilation et FC lentes", "Rigidité musculaire importante, victime très sensible à toutes mobilisations : peuvent déclencher troubles du rythme ou arrêt cardiaque"]}, {"q": "Signes d'une hypothermie grave", "a": ["Arrêt cardiaque apparent"]}, {"q": "Aspect des gelures de 1er degré", "a": ["Zone atteinte insensible, rouge, peu oedémateuse, mais sans cloques (phlyctènes)", "Après réchauffement : zone se recolore et victime récupère la perte de sensibilité"]}, {"q": "Aspect des gelures de 2e degré", "a": ["Zone atteinte localisée, insensible, rouge, oedémateuse, avec cloques remplies d’un liquide clair.", "Après réchauffement : perte de sensibilité persiste et dernières phalanges des doigts ou des orteils restent bleues ou violacées"]}, {"q": "Aspect des gelures de 3e degré", "a": ["Zone atteinte insensible, aspect bleuté ou noirâtre, remonte le plus souvent au-dessus des dernières phalanges sans atteindre la totalité de la main ou du pied.", "Après réchauffement : persistance d'une anesthésie et apparition de cloques sanglantes (phlyctènes hématiques).", "Irréversibilité des lésions => amputation de la zone la plus atteinte le plus souvent."]}, {"q": "Aspect des gelures de 4e degré", "a": ["Zone atteinte extensive, totalement insensible, bleutée et englobe la main ou l’avant-pied sans oedème.", "Après réchauffement : pas de cloques, tissus restent froids et insensibles et certains deviennent nécrotiques.", "Amputation nécessaire."]}, {"q": "Définition d'une brulûre grave (plutôt que simple)", "a": ["Une ou plusieurs cloques dont la surface totale est supérieure à celle de la moitié de la paume", "Destruction plus profonde (aspect blanchâtre ou noirâtre parfois indolore) associée souvent à des cloques et à une rougeur plus ou moins étendue", "Aspect circulaire (qui fait le tour du cou ou d’un membre)", "Localisation : visage ou cou, mains, articulations, voisinage des orifices naturels", "Rougeur étendue (coup de soleil généralisé par exemple) de la peau chez l’enfant", "Origine chimique, électrique ou radiologique"]}, {"q": "Définition d'une plaie grave (plutôt que simple)", "a": ["Hémorragie associée", "Mécanisme pénétrant (objet tranchant ou perforant, morsures, projectiles)", "Localisation : cou, thorax, abdomen, oeil, orifices naturels", "Aspect (déchiquetée, écrasée)", "Plaies multiples"]}, {"q": "Indication d'un pansement stérile", "a": ["Protéger une ou plusieurs plaies étendues", "Protéger les brûlures graves"]}, {"q": "Signes de traumatisme à l'abdomen", "a": ["Douleur spontanée siégeant au niveau d’une partie ou de tout l’abdomen", "Douleur à la palpation prudente des côtes", "Douleur provoquée lors d’une palpation prudente de l’abdomen qui peut être anormalement dur", "Absence de soulèvement de l’abdomen à chaque inspiration", "Contusion ou une plaie plus ou moins importante", "Vomissements de sang rouge (hématémèse)"]}, {"q": "Signes de traumatisme du thorax", "a": ["Douleur spontanée siégeant au niveau d’une ou plusieurs côtes ou provoquée par les mouvements respiratoires ou la toux", "Emission de crachats de sang rouge", "Douleur à la palpation prudente des côtes", "Plaie avec ou sans bulles sanglantes à l’expiration", "Contusion", "Anomalie du soulèvement de la poitrine", "Déformation nette du thorax", "Toux incessante ou des crachats de sang rouge", "Lésions associées (polytraumatisme)"]}, {"q": "Signes de traumatisme de la face et de la face antérieure du cou", "a": ["Douleur de la face, trouble de la vision ou difficulté à avaler", "Détresse respiratoire par obstruction des voies aériennes", "Détresse circulatoire secondaire à une hémorragie externe ou extériorisée", "Oedème de la face ou localisé (oedème des paupières)", "Hématome de la face, un hématome en lunette", "Une ou plusieurs plaies de la face, de la langue ou du cou", "Déformation de la face traduisant une fracture des os de la face, du nez ou de la mandibule", "Saignement du nez ou de la bouche", "Atteinte de l’oeil objectivée par une anomalie des mouvements de l’oeil, la présence de sang sous la cornée, une déformation de la pupille, une plaie de l’oeil avec ou sans corps étranger intraoculaire visible", "Désinsertion ou une fracture de dents"]}, {"q": "Signes de traumatisme des membres", "a": ["Perception d’un craquement au moment de la chute ou du choc", "Douleur vive à l’endroit de la blessure ou à côté, augmentée par le mouvement ou la palpation", "Difficulté voire de impossibilité à bouger le membre atteint ou à se déplacer", "Déformation et gonflement visibles au niveau de la lésion"]}, {"q": "Indication d'une compression manuelle", "a": ["Devant toute hémorragie externe accessible, quelle que soit sa localisation, et si elle ne présente pas de corps étranger."]}]}, {"cat": "Actions solidaires et sociales", "items": [{"q": "Lieux interdits lors des maraudes locales", "a": ["lieux privés", "bois", "parcs et jardins", "métros et gares", "parkings", "souterrains", "périphérique", "quais de Seine"]}, {"q": "Lieux interdits lors des maraudes locales spécifiques à Paris 10", "a": ["gare du Nord", "gare de l'Est", "place de la République"]}, {"q": "Matériel indispensable en maraude locale", "a": ["radio portative", "DSA", "Lot V si maraude en VL", "GHV si maraude en VL ou vélo"]}, {"q": "Matériel facultatif en maraude locale", "a": ["Denrées alimentaires", "Bouteilles d'eau", "Thermos d'eau chaude", "\"Guide solidarité\" édité par la Mairie de Paris", "Produits d'hygiène", "Vêtements", "Duvets"]}]}, {"cat": "PCS", "items": [{"q": "Indication d'une compression", "a": ["Sur toute plaie qui saigne abondamment"]}, {"q": "Indication de pose d'un garrot", "a": ["En cas d’hémorragie d’un membre lorsque la compression directe est inefficace ou impossible.", "Ne peut être posé qu’aux membres supérieurs ou inférieurs."]}, {"q": "Définition de l'arrêt cardiaque", "a": ["Une personne est en arrêt cardiaque lorsque son coeur ne fonctionne plus ou fonctionne d’une façon anarchique, ne permettant plus d’assurer l’oxygénation du cerveau."]}, {"q": "Indication de libération des voies aériennes", "a": ["Réalisée systématiquement avant de pouvoir rechercher la respiration chez une victime qui ne répond ou ne réagit à aucune sollicitation verbale ou physique."]}, {"q": "Indication de PLS", "a": ["Chez toute victime qui ne répond pas, ne réagit pas, mais respire (perte de connaissance) à la suite d’un évènement non traumatique ou à la demande du service de secours alerté."]}]}];
+const DATA=[
+ {
+  "cat": "Opérationnel",
+  "items": [
+   {
+    "q": "Signes d'une hypothermie légère",
+    "a": [
+     "Victime consciente",
+     "Ventilation et FC rapides",
+     "Frissons permanents",
+     "Peau froide"
+    ]
+   },
+   {
+    "q": "Signes d'une hypothermie modérée",
+    "a": [
+     "Délire, hallucinations, troubles de la conscience d'aggravation progressive",
+     "Ventilation et FC ralenties",
+     "Frissons disparus, rigidité musculaire modérée"
+    ]
+   },
+   {
+    "q": "Signes d'une hypothermie sévère",
+    "a": [
+     "Victime inconsciente",
+     "Pouls difficile à percevoir",
+     "Ventilation et FC lentes",
+     "Rigidité musculaire importante, victime très sensible à toutes mobilisations : peuvent déclencher troubles du rythme ou arrêt cardiaque"
+    ]
+   },
+   {
+    "q": "Signes d'une hypothermie grave",
+    "a": [
+     "Arrêt cardiaque apparent"
+    ]
+   },
+   {
+    "q": "Aspect des gelures de 1er degré",
+    "a": [
+     "Zone atteinte insensible, rouge, peu oedémateuse, mais sans cloques (phlyctènes)",
+     "Après réchauffement : zone se recolore et victime récupère la perte de sensibilité"
+    ]
+   },
+   {
+    "q": "Aspect des gelures de 2e degré",
+    "a": [
+     "Zone atteinte localisée, insensible, rouge, oedémateuse, avec cloques remplies d’un liquide clair.",
+     "Après réchauffement : perte de sensibilité persiste et dernières phalanges des doigts ou des orteils restent bleues ou violacées"
+    ]
+   },
+   {
+    "q": "Aspect des gelures de 3e degré",
+    "a": [
+     "Zone atteinte insensible, aspect bleuté ou noirâtre, remonte le plus souvent au-dessus des dernières phalanges sans atteindre la totalité de la main ou du pied.",
+     "Après réchauffement : persistance d'une anesthésie et apparition de cloques sanglantes (phlyctènes hématiques).",
+     "Irréversibilité des lésions => amputation de la zone la plus atteinte le plus souvent."
+    ]
+   },
+   {
+    "q": "Aspect des gelures de 4e degré",
+    "a": [
+     "Zone atteinte extensive, totalement insensible, bleutée et englobe la main ou l’avant-pied sans oedème.",
+     "Après réchauffement : pas de cloques, tissus restent froids et insensibles et certains deviennent nécrotiques.",
+     "Amputation nécessaire."
+    ]
+   },
+   {
+    "q": "Définition d'une brulûre grave (plutôt que simple)",
+    "a": [
+     "Une ou plusieurs cloques dont la surface totale est supérieure à celle de la moitié de la paume",
+     "Destruction plus profonde (aspect blanchâtre ou noirâtre parfois indolore) associée souvent à des cloques et à une rougeur plus ou moins étendue",
+     "Aspect circulaire (qui fait le tour du cou ou d’un membre)",
+     "Localisation : visage ou cou, mains, articulations, voisinage des orifices naturels",
+     "Rougeur étendue (coup de soleil généralisé par exemple) de la peau chez l’enfant",
+     "Origine chimique, électrique ou radiologique"
+    ]
+   },
+   {
+    "q": "Définition d'une plaie grave (plutôt que simple)",
+    "a": [
+     "Hémorragie associée",
+     "Mécanisme pénétrant (objet tranchant ou perforant, morsures, projectiles)",
+     "Localisation : cou, thorax, abdomen, oeil, orifices naturels",
+     "Aspect (déchiquetée, écrasée)",
+     "Plaies multiples"
+    ]
+   },
+   {
+    "q": "Indication d'un pansement stérile",
+    "a": [
+     "Protéger une ou plusieurs plaies étendues",
+     "Protéger les brûlures graves"
+    ]
+   },
+   {
+    "q": "Signes de traumatisme à l'abdomen",
+    "a": [
+     "Douleur spontanée siégeant au niveau d’une partie ou de tout l’abdomen",
+     "Douleur à la palpation prudente des côtes",
+     "Douleur provoquée lors d’une palpation prudente de l’abdomen qui peut être anormalement dur",
+     "Absence de soulèvement de l’abdomen à chaque inspiration",
+     "Contusion ou une plaie plus ou moins importante",
+     "Vomissements de sang rouge (hématémèse)"
+    ]
+   },
+   {
+    "q": "Signes de traumatisme du thorax",
+    "a": [
+     "Douleur spontanée siégeant au niveau d’une ou plusieurs côtes ou provoquée par les mouvements respiratoires ou la toux",
+     "Emission de crachats de sang rouge",
+     "Douleur à la palpation prudente des côtes",
+     "Plaie avec ou sans bulles sanglantes à l’expiration",
+     "Contusion",
+     "Anomalie du soulèvement de la poitrine",
+     "Déformation nette du thorax",
+     "Toux incessante ou des crachats de sang rouge",
+     "Lésions associées (polytraumatisme)"
+    ]
+   },
+   {
+    "q": "Signes de traumatisme de la face et de la face antérieure du cou",
+    "a": [
+     "Douleur de la face, trouble de la vision ou difficulté à avaler",
+     "Détresse respiratoire par obstruction des voies aériennes",
+     "Détresse circulatoire secondaire à une hémorragie externe ou extériorisée",
+     "Oedème de la face ou localisé (oedème des paupières)",
+     "Hématome de la face, un hématome en lunette",
+     "Une ou plusieurs plaies de la face, de la langue ou du cou",
+     "Déformation de la face traduisant une fracture des os de la face, du nez ou de la mandibule",
+     "Saignement du nez ou de la bouche",
+     "Atteinte de l’oeil objectivée par une anomalie des mouvements de l’oeil, la présence de sang sous la cornée, une déformation de la pupille, une plaie de l’oeil avec ou sans corps étranger intraoculaire visible",
+     "Désinsertion ou une fracture de dents"
+    ]
+   },
+   {
+    "q": "Signes de traumatisme des membres",
+    "a": [
+     "Perception d’un craquement au moment de la chute ou du choc",
+     "Douleur vive à l’endroit de la blessure ou à côté, augmentée par le mouvement ou la palpation",
+     "Difficulté voire de impossibilité à bouger le membre atteint ou à se déplacer",
+     "Déformation et gonflement visibles au niveau de la lésion"
+    ]
+   },
+   {
+    "q": "Indication d'une compression manuelle",
+    "a": [
+     "Devant toute hémorragie externe accessible, quelle que soit sa localisation, et si elle ne présente pas de corps étranger."
+    ]
+   }
+  ]
+ },
+ {
+  "cat": "Actions solidaires et sociales",
+  "items": [
+   {
+    "q": "Lieux interdits lors des maraudes locales",
+    "a": [
+     "lieux privés",
+     "bois",
+     "parcs et jardins",
+     "métros et gares",
+     "parkings",
+     "souterrains",
+     "périphérique",
+     "quais de Seine"
+    ]
+   },
+   {
+    "q": "Lieux interdits lors des maraudes locales spécifiques à Paris 10",
+    "a": [
+     "gare du Nord",
+     "gare de l'Est",
+     "place de la République"
+    ]
+   },
+   {
+    "q": "Matériel indispensable en maraude locale",
+    "a": [
+     "radio portative",
+     "DSA",
+     "Lot V si maraude en VL",
+     "GHV si maraude en VL ou vélo"
+    ]
+   },
+   {
+    "q": "Matériel facultatif en maraude locale",
+    "a": [
+     "Denrées alimentaires",
+     "Bouteilles d'eau",
+     "Thermos d'eau chaude",
+     "\"Guide solidarité\" édité par la Mairie de Paris",
+     "Produits d'hygiène",
+     "Vêtements",
+     "Duvets"
+    ]
+   }
+  ]
+ },
+ {
+  "cat": "PSC",
+  "items": [
+   {
+    "q": "Indication d'une compression",
+    "a": [
+     "Sur toute plaie qui saigne abondamment"
+    ]
+   },
+   {
+    "q": "Indication de pose d'un garrot",
+    "a": [
+     "En cas d’hémorragie d’un membre lorsque la compression directe est inefficace ou impossible.",
+     "Ne peut être posé qu’aux membres supérieurs ou inférieurs."
+    ]
+   },
+   {
+    "q": "Définition de l'arrêt cardiaque",
+    "a": [
+     "Une personne est en arrêt cardiaque lorsque son coeur ne fonctionne plus ou fonctionne d’une façon anarchique, ne permettant plus d’assurer l’oxygénation du cerveau."
+    ]
+   },
+   {
+    "q": "Indication de libération des voies aériennes",
+    "a": [
+     "Réalisée systématiquement avant de pouvoir rechercher la respiration chez une victime qui ne répond ou ne réagit à aucune sollicitation verbale ou physique."
+    ]
+   },
+   {
+    "q": "Indication de PLS",
+    "a": [
+     "Chez toute victime qui ne répond pas, ne réagit pas, mais respire (perte de connaissance) à la suite d’un évènement non traumatique ou à la demande du service de secours alerté."
+    ]
+   }
+  ]
+ }
+];
 const $=id=>document.getElementById(id);
 let cur=0,idx=0,onlyMissed=false;
 const S=DATA.map(t=>({order:t.items.map((_,i)=>i),res:{}}));
