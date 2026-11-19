@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cartes de révision</title>
+<style>
+/* Layout: onglets par catégorie, une carte à retourner à la fois, navigation dessous */
+:root{--bg:#f4f6fa;--card:#fff;--fg:#1b2433;--mut:#5b6678;--line:#d5dbe6;--acc:#1f5fbf;--accfg:#fff;--ok:#1d7a46;--okbg:#e3f4ea;--ko:#b3261e;--kobg:#fbe7e5;--back:#e9f0fb;--font:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151f;--card:#18202e;--fg:#e8edf6;--mut:#9aa6ba;--line:#2c3649;--acc:#6ea2f5;--accfg:#0b1220;--ok:#6fd49a;--okbg:#14301f;--ko:#ff8a80;--kobg:#3a1815;--back:#1c2a42;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10151f;--card:#18202e;--fg:#e8edf6;--mut:#9aa6ba;--line:#2c3649;--acc:#6ea2f5;--accfg:#0b1220;--ok:#6fd49a;--okbg:#14301f;--ko:#ff8a80;--kobg:#3a1815;--back:#1c2a42;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--font);padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-size:1.6rem;line-height:1.2;margin:0;text-wrap:balance}
+.intro{color:var(--mut);margin:4px 0 0}
+.tabs{display:flex;gap:4px;border-bottom:4px solid var(--acc);margin-bottom:-8px}
+.tab{flex:1 1 0;min-width:0;font:inherit;font-weight:600;border:1px solid var(--line);border-bottom:0;background:var(--back);color:var(--mut);border-radius:12px 12px 0 0;padding:10px 12px;min-height:52px;cursor:pointer;text-align:center;line-height:1.25;text-wrap:balance}
+.tab[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:var(--accfg)}
+button{font:inherit;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:9px 14px;cursor:pointer;min-height:44px}
+button.p{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:600}
+button:disabled{opacity:.45;cursor:default}
+button:focus-visible,.tab:focus-visible,.flip:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btns button{font-size:.9rem;min-height:38px;padding:6px 12px;background:transparent}
+.cnt{font-weight:600;font-variant-numeric:tabular-nums}
+.stat{color:var(--mut);font-size:.9rem;font-variant-numeric:tabular-nums}
+.stage{perspective:1200px}
+.flip{display:grid;width:100%;border:0;padding:0;background:none;cursor:pointer;text-align:left;font:inherit;color:inherit;transform-style:preserve-3d;transition:transform .5s;border-radius:16px}
+.flip.on{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid var(--line);border-radius:16px;padding:22px 20px;min-height:260px;display:flex;flex-direction:column;gap:12px;background:var(--card);min-width:0}
+.face.back{transform:rotateY(180deg);background:var(--back)}
+.tag{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);font-weight:600}
+.q{font-size:1.3rem;line-height:1.3;font-weight:600;margin:auto 0;text-wrap:balance}
+.tap{color:var(--mut);font-size:.85rem;margin-top:auto}
+.bq{font-size:.95rem;color:var(--mut);margin:0}
+ul.ans{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+ul.ans li{padding-left:2px}
+.grade{display:flex;gap:8px}
+.grade button{flex:1}
+.grade .ok{border-color:var(--ok);color:var(--ok)}
+.grade .ko{border-color:var(--ko);color:var(--ko)}
+.nav{display:flex;gap:8px;justify-content:space-between;align-items:center}
+.nav button{flex:none}
+@media (prefers-reduced-motion:reduce){.flip{transition:none}}
+</style>
+</head>
+<body>
+<main>
+ <header>
+  <h1>Cartes de révision</h1>
+  <p class="intro">Lisez la question, répondez de tête, puis touchez la carte pour la retourner.</p>
+ </header>
+ <div class="tabs" id="tabs" role="tablist"></div>
+ <div class="bar">
+  <div><div class="cnt" id="cnt" aria-live="polite"></div><div class="stat" id="stat"></div></div>
+  <div class="btns">
+   <button id="shuf">Mélanger</button>
+   <button id="only">Revoir les ratées</button>
+   <button id="rst">Recommencer</button>
+  </div>
+ </div>
+ <div class="stage"><button class="flip" id="flip" aria-live="polite"></button></div>
+ <div class="grade" id="grade" hidden>
+  <button class="ko" id="no">À revoir</button>
+  <button class="ok" id="yes">Je savais</button>
+ </div>
+ <div class="nav">
+  <button id="prev">← Précédente</button>
+   <button class="p" id="next">Suivante →</button>
+ </div>
+</main>
+<script>
+const DATA=[{"cat": "Opérationnel", "items": [{"q": "Signes d'une hypothermie légère", "a": ["Victime consciente", "Ventilation et FC rapides", "Frissons permanents", "Peau froide"]}, {"q": "Signes d'une hypothermie modérée", "a": ["Délire, hallucinations, troubles de la conscience d'aggravation progressive", "Ventilation et FC ralenties", "Frissons disparus, rigidité musculaire modérée"]}, {"q": "Signes d'une hypothermie sévère", "a": ["Victime inconsciente", "Pouls difficile à percevoir", "Ventilation et FC lentes", "Rigidité musculaire importante, victime très sensible à toutes mobilisations : peuvent déclencher troubles du rythme ou arrêt cardiaque"]}, {"q": "Signes d'une hypothermie grave", "a": ["Arrêt cardiaque apparent"]}]}, {"cat": "Actions solidaires et sociales", "items": [{"q": "Lieux interdits lors des maraudes", "a": ["lieux privés", "bois", "parcs et jardins", "métros et gares", "parkings", "souterrains", "périphérique", "quais de Seine"]}, {"q": "Lieux interdits lors des maraudes spécifiques à Paris 10", "a": ["gare du Nord", "gare de l'Est", "place de la République"]}, {"q": "Matériel indispensable en maraude", "a": ["radio portative", "DSA", "Lot V si maraude en VL", "GHV si maraude en VL ou vélo"]}]}];
+const $=id=>document.getElementById(id);
+let cur=0,idx=0,onlyMissed=false;
+const S=DATA.map(t=>({order:t.items.map((_,i)=>i),res:{}}));
+const deck=()=>{const s=S[cur];return onlyMissed?s.order.filter(i=>s.res[i]===0):s.order;};
+function tabs(){
+ $('tabs').innerHTML='';
+ DATA.forEach((t,i)=>{const b=document.createElement('button');b.className='tab';b.setAttribute('role','tab');b.setAttribute('aria-selected',i===cur);
+  b.textContent=t.cat+' ('+t.items.length+')';b.onclick=()=>{cur=i;idx=0;onlyMissed=false;render();};$('tabs').appendChild(b);});
+}
+function render(){
+ tabs();const d=deck(),s=S[cur];
+ $('only').textContent=onlyMissed?'Toutes les cartes':'Revoir les ratées';
+ $('only').disabled=!onlyMissed&&!Object.values(s.res).includes(0);
+ const f=$('flip');f.classList.remove('on');$('grade').hidden=true;
+ if(!d.length){f.innerHTML='<div class="face"><p class="q">Aucune carte à revoir.</p></div>';$('cnt').textContent='0 / 0';$('stat').textContent='';$('prev').disabled=$('next').disabled=true;return;}
+ if(idx>=d.length)idx=d.length-1;
+ const it=DATA[cur].items[d[idx]];
+ f.innerHTML='';
+ const fr=document.createElement('div');fr.className='face front';
+ fr.innerHTML='<span class="tag">Question</span><p class="q"></p><span class="tap">Touchez pour retourner</span>';fr.querySelector('.q').textContent=it.q;
+ const bk=document.createElement('div');bk.className='face back';
+ bk.innerHTML='<span class="tag">Réponse</span><p class="bq"></p><ul class="ans"></ul>';bk.querySelector('.bq').textContent=it.q;
+ const ul=bk.querySelector('ul');it.a.forEach(x=>{const li=document.createElement('li');li.textContent=x;ul.appendChild(li);});
+ f.append(fr,bk);bk.setAttribute('aria-hidden','true');
+ $('cnt').textContent='Carte '+(idx+1)+' / '+d.length;
+ const r=Object.values(s.res);$('stat').textContent=r.filter(v=>v===1).length+' sues · '+r.filter(v=>v===0).length+' à revoir';
+ $('prev').disabled=idx===0;$('next').disabled=idx===d.length-1;
+}
+function flip(){const f=$('flip');if(!f.querySelector('.face'))return;const on=f.classList.toggle('on');$('grade').hidden=!on;
+ f.querySelector('.front').setAttribute('aria-hidden',on);f.querySelector('.back').setAttribute('aria-hidden',!on);}
+function go(n){const d=deck();idx=Math.max(0,Math.min(d.length-1,idx+n));render();}
+function grade(v){const d=deck();if(!d.length)return;S[cur].res[d[idx]]=v;if(idx<d.length-1&&!onlyMissed){idx++;}else if(onlyMissed&&v===1){}else if(idx<d.length-1)idx++;render();}
+$('flip').onclick=flip;
+$('prev').onclick=()=>go(-1);$('next').onclick=()=>go(1);
+$('yes').onclick=()=>grade(1);$('no').onclick=()=>grade(0);
+$('shuf').onclick=()=>{const o=S[cur].order;for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]];}idx=0;render();};
+$('only').onclick=()=>{onlyMissed=!onlyMissed;idx=0;render();};
+$('rst').onclick=()=>{S[cur]={order:DATA[cur].items.map((_,i)=>i),res:{}};onlyMissed=false;idx=0;render();};
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);else if(e.key==='ArrowLeft')go(-1);});
+render();
+</script>
+</body>
+</html>
