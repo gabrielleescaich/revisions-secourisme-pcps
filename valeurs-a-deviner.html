@@ -40,7 +40,7 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 <main>
  <header>
   <h1>Valeurs à deviner</h1>
-  <p class="intro">Complétez chaque texte avec les bons chiffres. Seuls les chiffres sont à trouver.</p>
+  <p class="intro">Complète chaque texte avec les bons chiffres. Seuls les chiffres sont à trouver.</p>
  </header>
  <div class="bar">
   <div class="btns">
@@ -126,7 +126,7 @@ document.getElementById('rev').onclick=()=>{
  inputs.forEach(e=>{
   const w=e.parentNode;if(w.lastChild!==e)w.lastChild.remove();
   if(e.value!==e.dataset.v){
-   if(e.value!==''){const s=document.createElement('span');s.className='sol';s.textContent='vous : '+e.value;w.appendChild(s);}
+   if(e.value!==''){const s=document.createElement('span');s.className='sol';s.textContent='toi : '+e.value;w.appendChild(s);}
    e.value=e.dataset.v;e.className='n ko';
   }else e.className='n ok';
  });

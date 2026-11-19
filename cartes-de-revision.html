@@ -54,7 +54,7 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 <main>
  <header>
   <h1>Cartes de révision</h1>
-  <p class="intro">Lisez la question, répondez de tête, puis touchez la carte pour la retourner.</p>
+  <p class="intro">Lis la question, réponds de tête, puis touche la carte pour la retourner.</p>
  </header>
  <div class="tabs" id="tabs" role="tablist"></div>
  <div class="bar">
@@ -96,7 +96,7 @@ function render(){
  const it=DATA[cur].items[d[idx]];
  f.innerHTML='';
  const fr=document.createElement('div');fr.className='face front';
- fr.innerHTML='<span class="tag">Question</span><p class="q"></p><span class="tap">Touchez pour retourner</span>';fr.querySelector('.q').textContent=it.q;
+ fr.innerHTML='<span class="tag">Question</span><p class="q"></p><span class="tap">Touche pour retourner</span>';fr.querySelector('.q').textContent=it.q;
  const bk=document.createElement('div');bk.className='face back';
  bk.innerHTML='<span class="tag">Réponse</span><p class="bq"></p><ul class="ans"></ul>';bk.querySelector('.bq').textContent=it.q;
  const ul=bk.querySelector('ul');it.a.forEach(x=>{const li=document.createElement('li');li.textContent=x;ul.appendChild(li);});
