@@ -14,9 +14,6 @@ body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--font);padding-bloc
 main{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 h1{font-size:1.6rem;line-height:1.2;margin:0;text-wrap:balance}
 .intro{color:var(--mut);margin:4px 0 0}
-.tabs{display:flex;gap:4px;border-bottom:4px solid var(--acc);margin-bottom:-8px}
-.tab{flex:1 1 0;min-width:0;font:inherit;font-weight:600;border:1px solid var(--line);border-bottom:0;background:var(--back);color:var(--mut);border-radius:12px 12px 0 0;padding:10px 12px;min-height:52px;cursor:pointer;text-align:center;line-height:1.25;text-wrap:balance}
-.tab[aria-selected="true"]{background:var(--acc);border-color:var(--acc);color:var(--accfg)}
 button{font:inherit;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:9px 14px;cursor:pointer;min-height:44px}
 button.p{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:600}
 button:disabled{opacity:.45;cursor:default}
@@ -45,7 +42,14 @@ ul.ans li{padding-left:2px}
 .nav button{flex:none}
 @media (prefers-reduced-motion:reduce){.flip{transition:none}}
 h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
-@media(max-width:480px){.tab{font-size:.82rem;padding:8px 4px;overflow-wrap:anywhere}}
+.tabs{display:flex;margin-bottom:10px;border:2px solid var(--fg);border-radius:12px;overflow:hidden;background:var(--card);gap:0;border-bottom-width:2px}
+.tab{flex:1;min-width:0;border:0;border-radius:0;padding:12px 8px;font:inherit;font-size:1rem;font-weight:700;background:transparent;color:var(--fg);line-height:1.2;text-align:center;cursor:pointer;min-height:0;text-wrap:balance}
+.tab+.tab{border-left:2px solid var(--fg)}
+.tab:hover{background:var(--back)}
+.tab[aria-selected="true"]{background:var(--fg);color:var(--bg);box-shadow:inset 0 -4px 0 var(--acc)}
+.tab .n{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:999px;font-size:.75rem;font-weight:600;background:var(--line);color:var(--fg)}
+.tab[aria-selected="true"] .n{background:var(--acc);color:var(--accfg)}
+@media(max-width:480px){.tab{font-size:.88rem;padding:10px 4px;overflow-wrap:anywhere}}
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwYjRmOWUiLz48cGF0aCBkPSJNNDQuMyAyMS43QTE2IDE2IDAgMSAwIDQ4IDMySDM0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmNzkzMWUiIHN0cm9rZS13aWR0aD0iOCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjwvc3ZnPg==">
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEQUlEQVR4AbxXbVBUVRh+zmGh3CUCIlQsRAsmZLRFG0gnnUxaRgi3ZrRRZiKEyf/OWNM4jR/ZjDaj9aNszFV0LHAmp1CYbET60hoDMdGkbC1aqdWWAXfxYwVZ9nrehd25R+7dCwru3HfveZ/3Pc/zzL333LPLof68vCfRbK/aaLbvPmKxV3lEKGMUHrPgJG4IDbVkxIC5ZPdiczDYxoB1DMwmmlJFjNWRSpxMcJMGaYWJQwYs9qpCxtlhxlhauDBeZ9IgrbAJjuLqJAXKnvES1OVl2IXCXcl8Au99nYFN1m0cpwJdiQlxrIxzzp4dJw1DWtLm4vKP2ABnQbz4yJ/YnHUYR/M+hWfRRnQsfA8n5n4Ex8wDsKU4QT2GykMNpM3F5Z86lEc9lU85iXPzt2F/7n68kd6M3ITLiGEKzDEBZFq68crENtRYa9AkzCxJbYvKFS6SdmgVhAGts4kFUPN0NbZmf43UuBtaLRI2zexF1awD+DC7TuCKiOiHoYFNmQ2wPXohOotG9bUpv6JMhEZJgqIaKBD3lC63ekbvgAl7/5uDirPLkPH923jqxzexvLUU2y/OU7dhZ0ce9rnnSJhWwrVAwhiC2JR5hIaRIPEVQmzN+RLUdebg+sCD6Oq3oLErC+sv2FAqajcCsVjntGGtsygyL9pA18Crk8+GHq7w5AGFofTMChz3Tg9Dw84Nwoj1p9X4pGPesJoeoG9g0hlpznfdT+LYlSckTCvxBsxasC6ma8CacEmaVO3OlXJ10lWwAUYBaK8ITQO09B6O7VNrwOlPkfLRJ0xziqaBgGIa1pwUe3MYNlKgp/8B3VZNA9Tt8ifRKRLJprs3cKkvIcJz50DXwM/eDKl3qVgVEqBKUho3QB0O8Q5QlXGq5zF1Ko11DdR1ZkuN9om/hzYiCdRI8hMvojTttFSp88yQcnWia+Db7iz8dm2SuheOWV+K1+spCVMnzyW24wvr57CY+iPwtUAcjnmnRfI7B7oGqPGt80VQVKsnPuYWPsiuR+3svbA+5KYWxMf0ip3RjY9n1OLgM/skcWrY/PciaD3UVKOIauBkTzreb3+e+qSYn+xCY74jtPZdC7fgaJ4Dy9PkFxdN+Or/HOz8N5+GuhHVAM3a9s8CbHfNpeGoYmv7Aqw6t8xwjqEBBRzr/ypESUs5Wq+mGRI2+dJR3LISW9pfMOylBi5usocGRnHCl4GC5lV4SZDv6MjHD93TcbkvXuyIcWj2PY7P3LNBu2FxSwWafFON6AbriuLhCmOtg9nIvn8R5O84F2Pp6TLMPL5G/CZYi6KWSqz+YwloNxwZy2AXaXPxkI/KwODUsfkmbS5c7BB0PhH3+/CRNu89uNIVhFJxv9WVIMpJm5PwzUOVtUpQKVIURf4RQMUxDtIgLX99xSGiDhmggb++8hs/5znivrwr/jA0CKxTxD0fQwSdxEncpEFaQzhuAwAA///1aYzUAAAABklEQVQDANnxjLwM2ax6AAAAAElFTkSuQmCC">
@@ -319,7 +323,7 @@ const deck=()=>{const s=S[cur];return onlyMissed?s.order.filter(i=>s.res[i]===0)
 function tabs(){
  $('tabs').innerHTML='';
  DATA.forEach((t,i)=>{const b=document.createElement('button');b.className='tab';b.setAttribute('role','tab');b.setAttribute('aria-selected',i===cur);
-  b.textContent=t.cat+' ('+t.items.length+')';b.onclick=()=>{cur=i;idx=0;onlyMissed=false;render();};$('tabs').appendChild(b);});
+  b.append(t.cat+' ');const n=document.createElement('span');n.className='n';n.textContent=t.items.length;b.appendChild(n);b.onclick=()=>{cur=i;idx=0;onlyMissed=false;render();};$('tabs').appendChild(b);});
 }
 function render(){
  tabs();const d=deck(),s=S[cur];
