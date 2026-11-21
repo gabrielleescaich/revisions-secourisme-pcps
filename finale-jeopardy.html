@@ -102,6 +102,8 @@ label{font-weight:600;font-size:.9rem}
 .bi input{width:26px;height:26px;min-height:26px;flex:0 0 26px}
 .bi em{color:var(--ok);font-style:normal;font-weight:700;margin-left:auto;white-space:nowrap}
 .seg{flex-wrap:wrap}
+#sg{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));width:100%;max-width:420px}#sg button{padding:8px 0;min-width:0}
+#bn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;max-width:420px}#bn button{padding:8px 4px;min-width:0}
 .sw{display:flex;align-items:center;gap:10px;font-weight:600}
 .sw input{width:22px;min-height:22px;height:22px}
 </style>
@@ -142,7 +144,7 @@ function next(){clearInterval(G.tm);G.key=null;G.b=pick();G.q++;
 function play(){
  const b=G.b,n=b.clues.length;let shown=0,locked=G.names.map(()=>false),done=false,paused=false,left=0;
  const val=()=>4-Math.floor((shown-1)*4/n);
- const d=mk('<div class="stage"><div class="top"><span class="lab">Catégorie : <span id="c"></span></span><span class="keys">Espace : indice suivant · clic sur une phrase : te placer · 1-8 : joueur qui trouve</span></div><div class="hostans"><span>Réponse (pour toi seul) :</span><b id="an"></b></div><div class="lab">À lire à voix haute (la phrase en orange est celle que tu lis ; les points en dépendent)</div><p class="para" id="pa"></p><div class="worth"><span id="pv"></span><small>points en jeu</small></div><div class="players" id="pl"></div><div class="ctl"><button class="p nx" id="nx">Indice lu, suivant</button><span class="keys" id="sp" hidden></span><button id="gv">Personne n’a trouvé</button></div></div>');
+ const d=mk('<div class="stage"><div class="top"><span class="lab">Catégorie : <span id="c"></span></span><span class="keys">Espace : indice suivant · clic sur le texte : indice suivant · 1-8 : joueur qui trouve</span></div><div class="hostans"><span>Réponse (pour toi seul) :</span><b id="an"></b></div><div class="lab">À lire à voix haute (la phrase en orange est celle que tu lis ; les points en dépendent)</div><p class="para" id="pa"></p><div class="worth"><span id="pv"></span><small>points en jeu</small></div><div class="players" id="pl"></div><div class="ctl"><button class="p nx" id="nx">Indice lu, suivant</button><span class="keys" id="sp" hidden></span><button id="gv">Personne n’a trouvé</button></div></div>');
  d.querySelector('#c').textContent=b.th;const pa=d.querySelector('#pa'),pv=d.querySelector('#pv'),pl=d.querySelector('#pl'),an=d.querySelector('#an'),nx=d.querySelector('#nx');
  an.textContent=b.name;
  const pcs=G.names.map((nm,i)=>{const c=mk('<div class="pc"><div class="n"><span></span><span></span></div><div class="row"><button class="ok">A trouvé</button></div></div>');
@@ -151,9 +153,10 @@ function play(){
   if(G.pen){const k=document.createElement('button');k.className='ko';k.textContent='✗';k.setAttribute('aria-label',nm+' : mauvaise réponse');k.onclick=()=>{G.sc[i]-=val()/2;locked[i]=true;upd()};c.querySelector('.row').append(k)}
   pl.append(c);return c});
  function upd(){pcs.forEach((c,i)=>{c.querySelector('.n span:last-child').textContent=G.sc[i]+' pt';c.classList.toggle('locked',locked[i]||done);c.querySelectorAll('button').forEach(b=>b.disabled=locked[i]||done)})}
- const sp=b.clues.map((c,i)=>{const s=document.createElement('span');s.textContent=c.replace(/[.\s]*$/,'')+'. ';s.tabIndex=0;s.title='Marquer cet indice comme lu';s.onclick=()=>go(i+1);s.onkeydown=e=>{if(e.key==='Enter'){e.stopPropagation();go(i+1)}};pa.append(s);return s});
+ const sp=b.clues.map((c,i)=>{const s=document.createElement('span');s.textContent=c.replace(/[.\s]*$/,'')+'. ';s.tabIndex=0;s.onkeydown=e=>{if(e.key==='Enter'){e.stopPropagation();add()}};pa.append(s);return s});
  function go(k){if(done)return;shown=Math.max(1,Math.min(n,k));sp.forEach((s,i)=>{s.className=i<shown-1?'rd':i===shown-1?'cur':''});pv.textContent=val();left=dur(k0());nx.disabled=shown>=n;nx.textContent=shown>=n?'Dernier indice atteint':'Indice lu, suivant';upd()}
  function add(){go(shown+1)}
+ pa.style.cursor='pointer';pa.onclick=()=>{if(shown<n)add()};
  function k0(){return shown}
  function dur(k){return b.clues[k-1].trim().split(/\s+/).length*60/G.auto}
  function end(w){done=true;clearInterval(G.tm);const r=mk('<div class="reveal"></div>');r.textContent=b.name;
