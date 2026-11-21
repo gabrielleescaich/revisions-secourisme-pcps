@@ -13,6 +13,7 @@ body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--font);margin:0;pad
 main{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 h1{font-size:1.6rem;line-height:1.2;margin:0;text-wrap:balance;display:inline-block;border-bottom:4px solid var(--or);padding-bottom:4px}
 h2{margin:0;font-size:1.2rem}
+.intro ul{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
 .intro{color:var(--mut);margin:6px 0 0}
 button{font:inherit;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:9px 14px;cursor:pointer;min-height:44px}
 button.p{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:600}
@@ -103,7 +104,6 @@ label{font-weight:600;font-size:.9rem}
 .bi em{color:var(--ok);font-style:normal;font-weight:700;margin-left:auto;white-space:nowrap}
 .seg{flex-wrap:wrap}
 #sg{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));width:100%;max-width:420px}#sg button{padding:8px 0;min-width:0}
-#bn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;max-width:420px}#bn button{padding:8px 4px;min-width:0}
 .sw{display:flex;align-items:center;gap:10px;font-weight:600}
 .sw input{width:22px;min-height:22px;height:22px}
 </style>
@@ -112,7 +112,7 @@ label{font-weight:600;font-size:.9rem}
 <main>
 <header>
 <h1>Jeopardy sur les signes d’affections</h1>
-<p class="intro">Tu es le présentateur : lis les indices à voix haute, du plus vague au plus révélateur, et coche le joueur qui trouve. Cet écran est pour toi seul, les joueurs ne voient rien et ne font qu’écouter. Plus ils répondent tôt, plus ils marquent de points.</p>
+<div class="intro"><b>Règles du jeu</b><ul><li>Tu es le présentateur : cet écran est pour toi seul, les joueurs ne font qu’écouter ta voix.</li><li>Lis les indices à voix haute et coche le joueur qui trouve l’affection.</li><li>Plus il répond tôt, plus il marque de points : 4, 3, 2 ou 1 point.</li><li>Ensuite, chaque joueur cite à tour de rôle un autre signe : coche-le, il vaut +0,5 point. Si un joueur n’en trouve pas, la main passe au suivant ; le bonus s’arrête quand tous les signes sont cités ou que personne n’en trouve plus.</li><li>En mode manuel, clique sur le texte (ou appuie sur Espace) pour passer à l’indice suivant.</li></ul></div>
 </header>
 <section id="v"></section>
 </main>
@@ -122,19 +122,17 @@ const root=document.getElementById('v');
 const mk=h=>{const d=document.createElement('div');d.innerHTML=h.trim();return d.firstElementChild};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ALL=[];DATA.forEach(t=>t.bilans.forEach(b=>ALL.push({th:t.name,name:b.name,lv:b.signs})));
-let G={bonus:1,n:3,names:[],auto:0,pen:false,sc:[],used:new Set(),q:0,tm:null,key:null};
+let G={bonus:0.5,n:3,names:[],auto:0,sc:[],used:new Set(),q:0,tm:null,key:null};
 const show=el=>{root.innerHTML='';root.append(el)};
 function syl(s){return s.toLowerCase().split(/[^a-zàâäéèêëîïôöùûüœç]+/).filter(Boolean).reduce((a,w)=>{let c=(w.match(/[aeiouyàâäéèêëîïôöùûüœ]+/g)||[]).length;if(c>1&&/(e|es|ent)$/.test(w))c--;return a+Math.max(c,1)},0)}
 function mix(lv){const g={};lv.forEach(x=>(g[x[0]]=g[x[0]]||[]).push([x[1],x[2]]));return Object.keys(g).sort().flatMap(k=>g[k].map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]))}
 function pick(){let p=ALL.filter(x=>!G.used.has(x.name));if(!p.length){G.used=new Set();p=ALL}const x=p[Math.floor(Math.random()*p.length)];G.used.add(x.name);const mx=mix(x.lv);return{th:x.th,name:x.name,clues:mx.map(y=>y[0]),verb:mx.map(y=>y[1])}}
 function setup(){clearInterval(G.tm);G.key=null;
- const d=mk('<div class="panel"><h2>Les joueurs</h2><div class="seg" id="sg"></div><div id="nm" style="display:flex;flex-direction:column;gap:8px"></div><h2>Vitesse de lecture</h2><div class="seg" id="au"></div><h2>Points bonus par signe cité</h2><div class="seg" id="bn"></div><label class="sw"><input type="checkbox" id="pen"> Pénalité en cas de mauvaise réponse (−½ des points en jeu)</label><p class="note">Après une bonne réponse, le joueur peut citer d’autres signes pour gagner des points bonus ; s’il n’en trouve plus, la main passe au joueur suivant dans la liste (à sa droite). Cet écran est celui du présentateur : les joueurs n’écoutent que sa voix. En mode manuel, tu passes à l’indice suivant quand tu veux. Les indices les plus courants arrivent en premier, les plus caractéristiques à la fin. Ce classement est une estimation à valider par un formateur.</p><button class="p" id="go">Commencer</button></div>');
- const keep=()=>{d.querySelectorAll('.nm').forEach((e,i)=>G.names[i]=e.value);G.pen=d.querySelector('#pen').checked};
+ const d=mk('<div class="panel"><h2>Les joueurs</h2><div class="seg" id="sg"></div><div id="nm" style="display:flex;flex-direction:column;gap:8px"></div><h2>Vitesse de lecture</h2><div class="seg" id="au"></div><button class="p" id="go">Commencer</button></div>');
+ const keep=()=>{d.querySelectorAll('.nm').forEach((e,i)=>G.names[i]=e.value)};
  const draw=()=>{const sg=d.querySelector('#sg');sg.innerHTML='';for(let n=1;n<=8;n++){const b=document.createElement('button');b.textContent=n;b.setAttribute('aria-pressed',G.n===n);b.setAttribute('aria-label',n+' joueur'+(n>1?'s':''));b.onclick=()=>{keep();G.n=n;draw()};sg.append(b)}
   const nm=d.querySelector('#nm');nm.innerHTML='';for(let i=0;i<G.n;i++)nm.insertAdjacentHTML('beforeend','<input class="nm" value="'+esc(G.names[i]||'Joueur '+(i+1))+'" aria-label="Nom du joueur '+(i+1)+'">');
-  const au=d.querySelector('#au');au.innerHTML='';[[0,'Manuel'],[200,'Automatique']].forEach(([v,l])=>{const b=document.createElement('button');b.textContent=l;b.setAttribute('aria-pressed',G.auto===v);b.onclick=()=>{keep();G.auto=v;draw()};au.append(b)});
-  const bn=d.querySelector('#bn');bn.innerHTML='';[0,0.5,1,2].forEach(v=>{const b=document.createElement('button');b.textContent=v?'+'+String(v).replace('.',','):'Sans bonus';b.setAttribute('aria-pressed',G.bonus===v);b.onclick=()=>{keep();G.bonus=v;draw()};bn.append(b)});
-  d.querySelector('#pen').checked=G.pen};
+  const au=d.querySelector('#au');au.innerHTML='';[[0,'Manuel'],[200,'Automatique']].forEach(([v,l])=>{const b=document.createElement('button');b.textContent=l;b.setAttribute('aria-pressed',G.auto===v);b.onclick=()=>{keep();G.auto=v;draw()};au.append(b)});};
  draw();
  d.querySelector('#go').onclick=()=>{keep();G.names=G.names.slice(0,G.n).map((x,i)=>x.trim()||'Joueur '+(i+1));G.sc=G.names.map(()=>0);G.used=new Set();G.q=0;next()};
  show(d)}
@@ -150,9 +148,8 @@ function play(){
  const pcs=G.names.map((nm,i)=>{const c=mk('<div class="pc"><div class="n"><span></span><span></span></div><div class="row"><button class="ok">A trouvé</button></div></div>');
   c.querySelector('.n span').textContent=(i+1)+'. '+nm;
   c.querySelector('.ok').onclick=()=>win(i);
-  if(G.pen){const k=document.createElement('button');k.className='ko';k.textContent='✗';k.setAttribute('aria-label',nm+' : mauvaise réponse');k.onclick=()=>{G.sc[i]-=val()/2;locked[i]=true;upd()};c.querySelector('.row').append(k)}
   pl.append(c);return c});
- function upd(){pcs.forEach((c,i)=>{c.querySelector('.n span:last-child').textContent=G.sc[i]+' pt';c.classList.toggle('locked',locked[i]||done);c.querySelectorAll('button').forEach(b=>b.disabled=locked[i]||done)})}
+ function upd(){pcs.forEach((c,i)=>{c.querySelector('.n span:last-child').textContent=String(G.sc[i]).replace('.',',')+' pt';c.classList.toggle('locked',locked[i]||done);c.querySelectorAll('button').forEach(b=>b.disabled=locked[i]||done)})}
  const sp=b.clues.map((c,i)=>{const s=document.createElement('span');s.textContent=c.replace(/[.\s]*$/,'')+'. ';s.tabIndex=0;s.onkeydown=e=>{if(e.key==='Enter'){e.stopPropagation();add()}};pa.append(s);return s});
  function go(k){if(done)return;shown=Math.max(1,Math.min(n,k));sp.forEach((s,i)=>{s.className=i<shown-1?'rd':i===shown-1?'cur':''});pv.textContent=val();left=dur(k0());nx.disabled=shown>=n;nx.textContent=shown>=n?'Dernier indice atteint':'Indice lu, suivant';upd()}
  function add(){go(shown+1)}
@@ -190,7 +187,7 @@ function play(){
  show(d);go(1)}
 function final(){clearInterval(G.tm);G.key=null;const d=mk('<div class="stage"><div class="lab">Scores finaux</div><ol class="rank"></ol><div class="ctl"><button class="p nx" id="a">Nouvelle partie</button></div></div>');
  const o=G.names.map((n,i)=>({n,s:G.sc[i]})).sort((a,b)=>b.s-a.s);
- d.querySelector('.rank').innerHTML=o.map(x=>'<li style="font-size:1.4rem"><span>'+esc(x.n)+'</span><span class="sc">'+x.s+' pt</span></li>').join('');
+ d.querySelector('.rank').innerHTML=o.map(x=>'<li style="font-size:1.4rem"><span>'+esc(x.n)+'</span><span class="sc">'+String(x.s).replace('.',',')+' pt</span></li>').join('');
  d.querySelector('#a').onclick=setup;show(d)}
 document.addEventListener('keydown',e=>{if(G.key)G.key(e)});
 setup();
