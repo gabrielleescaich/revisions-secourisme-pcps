@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jeopardy sur les signes d’affections</title>
+<style>
+:root{--bg:#eef3fa;--card:#fff;--fg:#14233b;--mut:#5b6678;--line:#c8d3e4;--acc:#0b4f9e;--accfg:#fff;--or:#f7931e;--orfg:#14233b;--ok:#1d7a46;--okbg:#e3f4ea;--ko:#b3261e;--kobg:#fbe7e5;--back:#e9f0fb;--font:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1522;--card:#172236;--fg:#e8edf6;--mut:#9aa6ba;--line:#2b3a55;--acc:#6ea2f5;--accfg:#0b1220;--ok:#6fd49a;--okbg:#14301f;--ko:#ff8a80;--kobg:#3a1815;--back:#1c2a42;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1522;--card:#172236;--fg:#e8edf6;--mut:#9aa6ba;--line:#2b3a55;--acc:#6ea2f5;--accfg:#0b1220;--ok:#6fd49a;--okbg:#14301f;--ko:#ff8a80;--kobg:#3a1815;--back:#1c2a42;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--font);margin:0;padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-size:1.6rem;line-height:1.2;margin:0;text-wrap:balance;display:inline-block;border-bottom:4px solid var(--or);padding-bottom:4px}
+h2{margin:0;font-size:1.2rem}
+.intro{color:var(--mut);margin:6px 0 0}
+button{font:inherit;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:9px 14px;cursor:pointer;min-height:44px}
+button.p{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:600}
+button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+input{font:inherit;color:var(--fg);background:var(--card);border:2px solid var(--line);border-radius:8px;padding:8px 10px;min-height:44px;width:100%;min-width:0}
+label{font-weight:600;font-size:.9rem}
+.panel{background:var(--card);border:2px solid var(--acc);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.grid{display:grid;grid-template-columns:1fr 110px;gap:8px 10px;align-items:end}
+.seg{display:flex;gap:0;border:2px solid var(--fg);border-radius:12px;overflow:hidden;width:max-content;max-width:100%}
+.seg button{border:0;border-radius:0;min-height:44px;font-weight:700;background:transparent;padding:8px 18px}
+.seg button+button{border-left:2px solid var(--fg)}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg);box-shadow:inset 0 -4px 0 var(--acc)}
+.cat{background:var(--acc);color:var(--accfg);border-radius:12px;padding:22px 14px;text-align:center;font-weight:800;font-size:1.5rem;line-height:1.2;text-wrap:balance;border-bottom:6px solid var(--or)}
+.lab{font-size:.8rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+.clue ul{margin:0;padding-left:22px;font-size:1.1rem}
+.clue li{margin:3px 0}
+.clue{background:var(--back);border-radius:12px;padding:14px 16px}
+.timer{height:12px;background:var(--line);border-radius:999px;overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:var(--or);transform-origin:left;transition:transform 1s linear}
+.tm{font-weight:800;font-size:1.4rem;font-variant-numeric:tabular-nums;text-align:center}
+.pl{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.pl b{font-size:1.05rem}
+.res{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center}
+.ans{background:var(--okbg);color:var(--ok);border-radius:10px;padding:10px 14px;font-weight:700;font-size:1.15rem}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btns button{flex:1 1 120px}
+.g{background:var(--ok);color:#fff;border-color:var(--ok);font-weight:600}
+.b{background:var(--ko);color:#fff;border-color:var(--ko);font-weight:600}
+.btns .on{outline:3px solid var(--fg);outline-offset:2px}
+.sc{font-variant-numeric:tabular-nums;font-weight:800}
+.rank{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.rank li{display:flex;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:10px;background:var(--back);font-weight:700}
+.rank li:first-child{background:var(--or);color:var(--orfg)}
+.note{font-size:.85rem;color:var(--mut);margin:0}
+.hid{-webkit-text-security:disc}
+.score{display:flex;flex-wrap:wrap;gap:8px}
+.chip{flex:1 1 110px;border:2px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--card);display:flex;justify-content:space-between;gap:8px;font-weight:700}
+.chip.out{opacity:.45}
+.pts{font-size:2rem;font-weight:800;color:var(--acc);font-variant-numeric:tabular-nums;text-align:center;line-height:1}
+.pts small{display:block;font-size:.8rem;color:var(--mut);font-weight:600;margin-top:4px}
+.clue li{animation:in .35s}
+.clue li.new{font-weight:700}
+@keyframes in{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.clue li{animation:none}}
+.buzz{display:flex;flex-wrap:wrap;gap:8px}
+.buzz button{flex:1 1 130px;min-height:64px;font-size:1.1rem;font-weight:800;background:var(--or);color:var(--orfg);border-color:var(--or)}
+.buzz button:disabled{opacity:.35}
+
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.stage{background:var(--card);border:2px solid var(--acc);border-radius:18px;padding:clamp(16px,3vw,30px);display:flex;flex-direction:column;gap:18px}
+.bigcat{font-size:clamp(1.8rem,5vw,3.4rem);font-weight:800;text-align:center;line-height:1.15;text-wrap:balance;background:var(--acc);color:var(--accfg);border-radius:14px;padding:clamp(24px,6vw,60px) 16px;border-bottom:8px solid var(--or)}
+.clues{margin:0;padding:0;list-style:none;display:flex;flex-direction:column-reverse;gap:10px;min-height:7rem}
+.clues li{font-size:clamp(1.3rem,3.2vw,2.2rem);line-height:1.3;font-weight:600;padding:10px 16px;background:var(--back);border-left:8px solid var(--line);border-radius:10px;animation:in .35s}
+.clues li.new{border-left-color:var(--or);font-weight:800}
+@keyframes in{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.clues li{animation:none}}
+.worth{text-align:center;font-weight:800;font-size:clamp(2rem,6vw,3.6rem);color:var(--acc);font-variant-numeric:tabular-nums;line-height:1}
+.worth small{display:block;font-size:.9rem;color:var(--mut);font-weight:600;margin-top:4px}
+.ctl{display:flex;flex-wrap:wrap;gap:10px}
+.ctl button{min-height:56px;font-size:1.1rem;font-weight:700}
+.nx{flex:2 1 220px}
+.players{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.pc{border:2px solid var(--line);border-radius:14px;background:var(--card);padding:10px;display:flex;flex-direction:column;gap:8px}
+.pc.locked{opacity:.45}
+.pc .n{font-weight:800;font-size:1.1rem;display:flex;justify-content:space-between;gap:8px}
+.pc .n span:last-child{font-variant-numeric:tabular-nums;color:var(--acc)}
+.pc .row{display:flex;gap:6px}
+.pc .row button{flex:1;min-height:52px;font-size:1.05rem;font-weight:800}
+.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.ko{background:var(--kobg);color:var(--ko);border-color:var(--ko);flex:0 0 52px!important}
+.hostans{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:2px dashed var(--or);border-radius:12px;padding:8px 12px;font-size:.95rem}
+.hostans b{font-size:1.25rem;color:var(--ok)}
+.para{font-size:clamp(1.2rem,2.6vw,1.9rem);line-height:1.7;margin:0;padding:6px 4px}
+.para span{border-radius:6px;padding:2px 3px;cursor:pointer;transition:background .2s}
+.para span.rd{color:var(--mut)}
+.para span.cur{background:var(--or);color:var(--orfg);font-weight:800;box-shadow:0 0 0 3px var(--or)}
+.para span:hover{background:var(--back)}
+.para span.cur:hover{background:var(--or)}
+.clues li:not(.new){font-size:1.05rem;font-weight:500;opacity:.65;padding:6px 14px}
+.hostans .mask{filter:blur(7px);user-select:none;cursor:pointer}
+.reveal{font-size:clamp(1.6rem,4.5vw,3rem);font-weight:800;text-align:center;background:var(--okbg);color:var(--ok);border-radius:14px;padding:22px 12px;text-wrap:balance}
+.keys{font-size:.85rem;color:var(--mut)}
+.bonus{border:2px solid var(--or);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--back)}
+.bonus .who{margin:0;font-size:1.3rem}
+.blist{display:flex;flex-direction:column;gap:8px}
+.bi{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:1.05rem;cursor:pointer}
+.bi input{width:26px;height:26px;min-height:26px;flex:0 0 26px}
+.bi em{color:var(--ok);font-style:normal;font-weight:700;margin-left:auto;white-space:nowrap}
+.seg{flex-wrap:wrap}
+.sw{display:flex;align-items:center;gap:10px;font-weight:600}
+.sw input{width:22px;min-height:22px;height:22px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Jeopardy sur les signes d’affections</h1>
+<p class="intro">Tu es le présentateur : lis les indices à voix haute, du plus vague au plus révélateur, et coche le joueur qui trouve. Cet écran est pour toi seul, les joueurs ne voient rien et ne font qu’écouter. Plus ils répondent tôt, plus ils marquent de points.</p>
+</header>
+<section id="v"></section>
+</main>
+<script>
+const DATA=[{"name": "Cardio-circulatoire", "bilans": [{"name": "Infarctus", "signs": [[1, "Elle se plaint d’une douleur irradiant dans la mâchoire et le bras gauche.", "Douleur irradiant dans la mâchoire et le bras gauche"], [2, "La victime présente une douleur constrictive.", "Douleur constrictive"], [2, "On note une douleur rétro-sternale.", "Douleur rétro-sternale"], [4, "Il s’agit d’une douleur atroce et persistante.", "Douleur atroce et persistante"], [4, "C’est une douleur qui ne cède pas au repos ou à la prise de vasodilatateur.", "Douleur qui ne cède pas au repos ou à la prise de vasodilatateur"]]}, {"name": "Crise d’angor", "signs": [[1, "Elle se plaint d’une douleur irradiant dans la mâchoire et le bras gauche.", "Douleur irradiant dans la mâchoire et le bras gauche"], [2, "La victime présente une douleur constrictive.", "Douleur constrictive"], [2, "On note une douleur rétro-sternale.", "Douleur rétro-sternale"], [4, "C’est une douleur qui survient généralement à l’effort.", "Douleur qui survient généralement à l’effort"], [4, "Il s’agit d’une douleur qui cède au repos ou à la prise d’un vasodilatateur.", "Douleur qui cède au repos ou à la prise d’un vasodilatateur"]]}, {"name": "Péricardite aiguë", "signs": [[1, "On note une douleur irradiant dans l’épaule ou le bras gauche.", "Douleur irradiant dans l’épaule ou le bras gauche"], [1, "On note une augmentation de la FR.", "Augmentation de la FR"], [2, "La victime présente une douleur constrictive semblable à celle d’une crise d’angor.", "Douleur constrictive semblable à celle d’une crise d’angor"], [3, "Elle se plaint d’une douleur précordiale (en avant du coeur).", "Douleur précordiale (en avant du coeur)"], [4, "C’est une douleur augmentée à l’inspiration et à la toux.", "Douleur augmentée à l’inspiration et à la toux"], [4, "Il s’agit d’une douleur diminuée par la position penchée en avant.", "Douleur diminuée par la position penchée en avant"]]}, {"name": "Embolie pulmonaire", "signs": [[1, "On note une augmentation de la FR.", "Augmentation de la FR"], [1, "Elle ressent de l’angoisse.", "Angoisse"], [3, "C’est une douleur de survenue brutale.", "Douleur de survenue brutale"], [3, "Parmi les facteurs de risques : immobilisation prolongée, obésité, BPCO (bronchopneumopathie chronique obstructive), insuffisance cardiaque congestive.", "Facteurs de risques : Immobilisation prolongée, Obésité, BPCO (bronchopneumopathie chronique obstructive), Insuffisance cardiaque congestive"], [4, "La victime présente une douleur associée à des difficultés respiratoires.", "Douleur associée à des difficultés respiratoires"]]}, {"name": "Dissection aortique", "signs": [[1, "On note une douleur irradiant dans le dos.", "Douleur irradiant dans le dos"], [2, "Le pouls est absent ou diminué aux membres supérieurs.", "Pouls absent ou diminué aux membres supérieurs"], [3, "La victime présente une douleur précordiale très intense.", "Douleur précordiale très intense"], [3, "C’est une douleur de survenue brutale.", "Douleur de survenue brutale"], [3, "On note une hypertension.", "Hypertension"], [3, "On note une asymétrie de la tension aux deux bras.", "Asymétrie de la tension aux deux bras"]]}]}, {"name": "Neurologique", "bilans": [{"name": "Méningite", "signs": [[1, "La victime présente de la fièvre.", "Fièvre"], [1, "On note des céphalées violentes.", "Céphalées violentes"], [1, "Elle se plaint de nausées / vomissements en jet.", "Nausées / vomissements en jet"], [4, "On note une raideur de la nuque.", "Raideur de la nuque"], [4, "On observe une photophobie.", "Photophobie"], [4, "Elle adopte la position en chien de fusil.", "Position en chien de fusil"], [4, "On observe un purpura fulminans.", "Purpura fulminans"]]}]}, {"name": "Respiratoire", "bilans": [{"name": "OAP (œdème aigu des poumons)", "signs": [[1, "La victime présente des troubles respiratoires.", "Troubles respiratoires"], [3, "On entend des bruits respiratoires (crépitements, ronflement, parfois sifflements).", "Bruits respiratoire (crépitements, ronflement, parfois sifflements)"], [3, "On note une hypertension ou hypotension (signe de gravité).", "Hypertension ou hypotension (signe de gravité)"], [4, "Elle se plaint de douleurs thoraciques.", "Douleurs thoracique"], [4, "Elle se plaint de la mousse aux lèvres avec écume blanchâtre ou rosée (signe de gravité).", "Mousse au lèvres avec écume blanchâtre ou rosée (signe de gravité)"]]}, {"name": "OVAS (œdème des voies aériennes supérieures)", "signs": [[2, "La victime présente une toux incessante.", "Toux incessante"], [2, "On note des sueurs.", "Sueurs"], [3, "On entend un sifflement notamment à l’inspiration.", "Sifflement notamment à l’inspiration"], [3, "Elle se plaint d’une difficulté d’expression (voix rauque).", "Difficulté d’expression (voix rauque)"], [3, "On observe un gonflement de la gorge visible de l’extérieur.", "Gonflement de la gorge visible de l’extérieur"]]}, {"name": "Pneumothorax", "signs": [[1, "La victime présente des difficultés respiratoires et un essoufflement.", "Difficultés respiratoires, essoufflement"], [2, "Elle se plaint d’une toux persistante.", "Toux persistante"], [3, "On note une douleur vive dans la poitrine.", "Douleur vive dans la poitrine"], [4, "L’apparition est brutale.", "Apparition brutale"]]}, {"name": "Hémothorax", "signs": [[1, "On note une hyperthermie (fièvre) en cas d’infection.", "Hyperthermie (fièvre) en cas d’infection"], [1, "Elle se plaint d’une dyspnée (essoufflement) surtout quand la pleurésie est abondante.", "Dyspnée (essoufflement) surtout quand la pleurésie est abondante"], [2, "On observe une toux (le plus souvent sèche) essentiellement aux changements de position.", "Toux (le plus souvent sèche) essentiellement aux changements de position"], [3, "La victime présente une asthénie (fatigue importante).", "Asthénie (fatigue importante)"], [3, "On constate des douleurs localisées au côté du thorax.", "Douleurs localisées au côté du thorax"], [4, "Autre signe : une perte d’appétit.", "Perte d’appétit"], [4, "On relève un amaigrissement.", "Amaigrissement"]]}]}, {"name": "Intoxications", "bilans": [{"name": "Intoxication médicamenteuse", "signs": [[1, "La victime présente une somnolence.", "Somnolence"], [1, "On note des vomissements.", "Vomissements"], [3, "Elle se plaint d’une désorientation spatio-temporelle.", "Désorientation spatio-temporelle"], [4, "On trouve des plaies, lésion ou tout autre signe dans le cas d’une volonté suicidaire.", "Plaies, lésion ou tout autre signe dans le cas d’une volonté suicidaire"]]}, {"name": "Intoxication au CO et fumées d’incendie", "signs": [[1, "La victime présente des nausées.", "Nausées"], [1, "On note une somnolence.", "Somnolence"], [1, "Elle se plaint de céphalées.", "Céphalées"], [4, "Il y a de multiples victimes d’une même pièce, d’un même endroit.", "Multiples victimes d’une même pièce, d’un même endroit"], [4, "Les victimes ne savent pas ce qui se passe.", "Les victimes ne savent pas ce qui se passe"], [4, "Les animaux aussi sont atteints.", "Les animaux aussi sont atteints"]]}, {"name": "Intoxication éthylique", "signs": [[1, "La victime présente une agitation ou somnolence.", "Agitation ou somnolence"], [1, "Elle tient des propos incohérents.", "Propos incohérent"], [1, "On observe des vomissements.", "Vomissements"], [3, "Elle se plaint d’une désorientation.", "Désorientation"], [4, "Elle est en exaltation, euphorie.", "Exaltation, euphorie"], [4, "Autre signe : une absence de sensation de douleur.", "Absence de sensation de douleur"]]}, {"name": "Intoxication par stupéfiants", "signs": [[1, "La victime présente des troubles de la conscience.", "Troubles de la conscience"], [1, "On note une agitation.", "Agitation"], [1, "Elle se plaint de vomissements.", "Vomissements"], [4, "On observe des pupilles en myosis bilatéral.", "Pupilles en myosis bilatéral"], [4, "Autre signe : une pause ventilatoire qui peut mener jusqu’à l’arrêt ventilatoire.", "Pause ventilatoire qui peut mener jusqu’à l’arrêt ventilatoire"], [4, "On voit des traces de piqûres, seringue à proximité.", "Traces de piqûres, seringue à proximité"]]}]}, {"name": "Pédiatrie et pathologies diverses", "bilans": [{"name": "Déshydratation (enfant)", "signs": [[1, "Il présente des vomissements.", "Vomissements"], [3, "Son apport hydrique dans la journée est insuffisant.", "Apport hydrique dans la journée insuffisant"], [3, "On observe chez lui une exposition à la chaleur.", "Exposition à la chaleur"], [4, "On note une diarrhée.", "Diarrhée"], [4, "On relève une épidémie de gastro-entérite dans son environnement.", "Epidémie de gastro-entérite dans son environnement"], [4, "Autre signe : une absence de larmes.", "Absence larmes"], [4, "On constate chez lui des couches sèches persistantes.", "Couches sèches persistantes"], [4, "On remarque la muqueuse sèche (bouche).", "Muqueuse sèche (bouche)"], [4, "On retrouve chez lui les yeux cernés, puis creusés.", "Yeux cernés, puis creusés"], [4, "On repère un pli cutané persistant.", "Pli cutané persistant"], [4, "À noter aussi : une fontanelle creuse.", "Fontanelle creuse"]]}, {"name": "Spasmophilie et tétanie", "signs": [[1, "La victime présente une fréquence respiratoire élevée.", "Une fréquence respiratoire élevée"], [3, "Elle ressent une sensation de boule dans la gorge, angoisse.", "Sensation de boule dans la gorge, angoisse"], [3, "Elle ressent une sensation d’oppression thoracique.", "Sensation d’oppression thoracique"], [4, "On note un engourdissement, fourmillements symétriques des extrémités des membres.", "Engourdissement, fourmillements symétriques des extrémités des membres"], [4, "Elle se plaint de difficultés à déglutir.", "Des difficultés à déglutir"], [4, "On observe une absence de perte de connaissance.", "Une absence de perte de connaissance"], [4, "Autre signe : des mains en position « d’accoucheur ».", "Des mains en position « d’accoucheur »"]]}, {"name": "Diabète et hypoglycémie", "signs": [[1, "Elle se plaint d’une agitation, agressivité.", "Agitation, agressivité"], [2, "Autre signe : des sueurs.", "Sueurs"], [2, "On remarque des idées lentes, parole lente et confuse.", "Idées lentes, parole lente et confuse"], [3, "La victime présente de la fatigue.", "Fatigue"], [3, "On note des troubles de la vue.", "Troubles de la vue"], [3, "On observe une tachycardie.", "Tachycardie"], [3, "On relève une pâleur.", "Pâleur"], [3, "On constate des tremblements.", "Tremblements"], [4, "Elle a faim.", "Faim"], [4, "On retrouve un état ébrieux sans prise d’alcool.", "État ébrieux sans prise d’alcool"], [4, "On repère une glycémie capillaire basse.", "Une glycémie capillaire basse"], [4, "On trouve la présence de morceaux de sucre dans les poches ou le sac de la victime.", "La présence de morceaux de sucre dans les poches ou le sac de la victime"]]}, {"name": "Allergie", "signs": [[1, "La victime présente des nausées ou vomissements.", "Des nausées ou vomissements"], [3, "On note une modification de la voix (voix rauque).", "Une modification de la voix (voix rauque)"], [3, "On relève un œdème de la face et des voies aériennes supérieures.", "Un œdème de la face et des voies aériennes supérieures"], [3, "On constate une détresse circulatoire.", "Détresse circulatoire"], [4, "Elle se plaint d’un écoulement nasal, éternuements.", "Écoulement nasal, éternuements"], [4, "On observe une conjonctivite, une rougeur des yeux.", "Une conjonctivite, une rougeur des yeux"], [4, "Autre signe : des plaques rouges discrètement en relief sur la peau avec démangeaisons (urticaire).", "Plaques rouges discrètement en relief sur la peau avec démangeaisons (urticaire)"]]}, {"name": "Maladies infectieuses (enfant)", "signs": [[1, "Il présente de la fièvre.", "Fièvre"], [2, "On constate chez lui des convulsions.", "Convulsions"], [3, "On note une altération de l’état général.", "Altération de l’état général"], [3, "On relève une incapacité de l’enfant à boire.", "Incapacité de l’enfant à boire"], [3, "On remarque des signes détresses circulatoires.", "Signes détresses circulatoires"], [4, "On observe chez lui des frissons.", "Frissons"], [4, "Autre signe : une hypotonie.", "Hypotonie"], [4, "On retrouve chez lui un purpura.", "Purpura"]]}]}, {"name": "Grossesse et personne âgée", "bilans": [{"name": "Maladie d’Alzheimer", "signs": [[1, "La victime présente une agressivité et agitation.", "Agressivité et agitation"], [2, "Elle se plaint d’un syndrome dépressif.", "Syndrome dépressif"], [3, "On note des troubles du langage.", "Troubles du langage"], [4, "On observe une disparition des repères temporels (jour/nuit).", "Disparition des repères temporels (jour/nuit)"], [4, "Autre signe : une disparition des repères spatiaux.", "Disparition des repères spatiaux"], [4, "On relève une difficulté à reconnaître les objets.", "Difficulté à reconnaître les objets"], [4, "On constate une perte progressive de la mémoire à court terme.", "Perte progressive de la mémoire à court terme"]]}]}];
+const root=document.getElementById('v');
+const mk=h=>{const d=document.createElement('div');d.innerHTML=h.trim();return d.firstElementChild};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ALL=[];DATA.forEach(t=>t.bilans.forEach(b=>ALL.push({th:t.name,name:b.name,lv:b.signs})));
+let G={bonus:1,n:3,names:[],auto:0,pen:false,sc:[],used:new Set(),q:0,tm:null,key:null};
+const show=el=>{root.innerHTML='';root.append(el)};
+function syl(s){return s.toLowerCase().split(/[^a-zàâäéèêëîïôöùûüœç]+/).filter(Boolean).reduce((a,w)=>{let c=(w.match(/[aeiouyàâäéèêëîïôöùûüœ]+/g)||[]).length;if(c>1&&/(e|es|ent)$/.test(w))c--;return a+Math.max(c,1)},0)}
+function mix(lv){const g={};lv.forEach(x=>(g[x[0]]=g[x[0]]||[]).push([x[1],x[2]]));return Object.keys(g).sort().flatMap(k=>g[k].map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]))}
+function pick(){let p=ALL.filter(x=>!G.used.has(x.name));if(!p.length){G.used=new Set();p=ALL}const x=p[Math.floor(Math.random()*p.length)];G.used.add(x.name);const mx=mix(x.lv);return{th:x.th,name:x.name,clues:mx.map(y=>y[0]),verb:mx.map(y=>y[1])}}
+function setup(){clearInterval(G.tm);G.key=null;
+ const d=mk('<div class="panel"><h2>Les joueurs</h2><div class="seg" id="sg"></div><div id="nm" style="display:flex;flex-direction:column;gap:8px"></div><h2>Vitesse de lecture</h2><div class="seg" id="au"></div><h2>Points bonus par signe cité</h2><div class="seg" id="bn"></div><label class="sw"><input type="checkbox" id="pen"> Pénalité en cas de mauvaise réponse (−½ des points en jeu)</label><p class="note">Après une bonne réponse, le joueur peut citer d’autres signes pour gagner des points bonus ; s’il n’en trouve plus, la main passe au joueur suivant dans la liste (à sa droite). Cet écran est celui du présentateur : les joueurs n’écoutent que sa voix. En mode manuel, tu passes à l’indice suivant quand tu veux. Les indices les plus courants arrivent en premier, les plus caractéristiques à la fin. Ce classement est une estimation à valider par un formateur.</p><button class="p" id="go">Commencer</button></div>');
+ const keep=()=>{d.querySelectorAll('.nm').forEach((e,i)=>G.names[i]=e.value);G.pen=d.querySelector('#pen').checked};
+ const draw=()=>{const sg=d.querySelector('#sg');sg.innerHTML='';for(let n=1;n<=8;n++){const b=document.createElement('button');b.textContent=n;b.setAttribute('aria-pressed',G.n===n);b.setAttribute('aria-label',n+' joueur'+(n>1?'s':''));b.onclick=()=>{keep();G.n=n;draw()};sg.append(b)}
+  const nm=d.querySelector('#nm');nm.innerHTML='';for(let i=0;i<G.n;i++)nm.insertAdjacentHTML('beforeend','<input class="nm" value="'+esc(G.names[i]||'Joueur '+(i+1))+'" aria-label="Nom du joueur '+(i+1)+'">');
+  const au=d.querySelector('#au');au.innerHTML='';[[0,'Manuel'],[200,'Automatique']].forEach(([v,l])=>{const b=document.createElement('button');b.textContent=l;b.setAttribute('aria-pressed',G.auto===v);b.onclick=()=>{keep();G.auto=v;draw()};au.append(b)});
+  const bn=d.querySelector('#bn');bn.innerHTML='';[0,0.5,1,2].forEach(v=>{const b=document.createElement('button');b.textContent=v?'+'+String(v).replace('.',','):'Sans bonus';b.setAttribute('aria-pressed',G.bonus===v);b.onclick=()=>{keep();G.bonus=v;draw()};bn.append(b)});
+  d.querySelector('#pen').checked=G.pen};
+ draw();
+ d.querySelector('#go').onclick=()=>{keep();G.names=G.names.slice(0,G.n).map((x,i)=>x.trim()||'Joueur '+(i+1));G.sc=G.names.map(()=>0);G.used=new Set();G.q=0;next()};
+ show(d)}
+function next(){clearInterval(G.tm);G.key=null;G.b=pick();G.q++;
+ const d=mk('<div class="stage"><div class="lab">Question '+G.q+'</div><div class="lab">Catégorie</div><div class="bigcat"></div><div class="ctl"><button class="p nx" id="st">Lancer les indices</button><button id="fi">Terminer la partie</button></div></div>');
+ d.querySelector('.bigcat').textContent=G.b.th;d.querySelector('#st').onclick=play;d.querySelector('#fi').onclick=final;show(d);G.key=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();play()}}}
+function play(){
+ const b=G.b,n=b.clues.length;let shown=0,locked=G.names.map(()=>false),done=false,paused=false,left=0;
+ const val=()=>4-Math.floor((shown-1)*4/n);
+ const d=mk('<div class="stage"><div class="top"><span class="lab">Catégorie : <span id="c"></span></span><span class="keys">Espace : indice suivant · clic sur une phrase : te placer · 1-8 : joueur qui trouve</span></div><div class="hostans"><span>Réponse (pour toi seul) :</span><b id="an"></b></div><div class="lab">À lire à voix haute (la phrase en orange est celle que tu lis ; les points en dépendent)</div><p class="para" id="pa"></p><div class="worth"><span id="pv"></span><small>points en jeu</small></div><div class="players" id="pl"></div><div class="ctl"><button class="p nx" id="nx">Indice lu, suivant</button><span class="keys" id="sp" hidden></span><button id="gv">Personne n’a trouvé</button></div></div>');
+ d.querySelector('#c').textContent=b.th;const pa=d.querySelector('#pa'),pv=d.querySelector('#pv'),pl=d.querySelector('#pl'),an=d.querySelector('#an'),nx=d.querySelector('#nx');
+ an.textContent=b.name;
+ const pcs=G.names.map((nm,i)=>{const c=mk('<div class="pc"><div class="n"><span></span><span></span></div><div class="row"><button class="ok">A trouvé</button></div></div>');
+  c.querySelector('.n span').textContent=(i+1)+'. '+nm;
+  c.querySelector('.ok').onclick=()=>win(i);
+  if(G.pen){const k=document.createElement('button');k.className='ko';k.textContent='✗';k.setAttribute('aria-label',nm+' : mauvaise réponse');k.onclick=()=>{G.sc[i]-=val()/2;locked[i]=true;upd()};c.querySelector('.row').append(k)}
+  pl.append(c);return c});
+ function upd(){pcs.forEach((c,i)=>{c.querySelector('.n span:last-child').textContent=G.sc[i]+' pt';c.classList.toggle('locked',locked[i]||done);c.querySelectorAll('button').forEach(b=>b.disabled=locked[i]||done)})}
+ const sp=b.clues.map((c,i)=>{const s=document.createElement('span');s.textContent=c.replace(/[.\s]*$/,'')+'. ';s.tabIndex=0;s.title='Marquer cet indice comme lu';s.onclick=()=>go(i+1);s.onkeydown=e=>{if(e.key==='Enter'){e.stopPropagation();go(i+1)}};pa.append(s);return s});
+ function go(k){if(done)return;shown=Math.max(1,Math.min(n,k));sp.forEach((s,i)=>{s.className=i<shown-1?'rd':i===shown-1?'cur':''});pv.textContent=val();left=dur(k0());nx.disabled=shown>=n;nx.textContent=shown>=n?'Dernier indice atteint':'Indice lu, suivant';upd()}
+ function add(){go(shown+1)}
+ function k0(){return shown}
+ function dur(k){return b.clues[k-1].trim().split(/\s+/).length*60/G.auto}
+ function end(w){done=true;clearInterval(G.tm);const r=mk('<div class="reveal"></div>');r.textContent=b.name;
+  d.querySelector('.worth').replaceWith(r);d.querySelector('.hostans').remove();d.querySelector('.stage>.lab,.lab+ul')&&0;
+  const ct=d.querySelector('.ctl');ct.innerHTML='';
+  const a=document.createElement('button');a.className='p nx';a.textContent='Question suivante';a.onclick=next;
+  const f=document.createElement('button');f.textContent='Terminer la partie';f.onclick=final;ct.append(a,f);
+  if(w!=null){const t=mk('<div class="lab"></div>');t.textContent=G.names[w]+' marque '+pts+' points';r.after(t)}
+  upd();G.key=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();next()}};
+  const rem=b.verb.slice(shown);
+  if(w!=null&&G.bonus&&rem.length){G.key=null;bonus(w,rem,ct,r)}}
+ function bonus(first,rem,ct,anchor){
+  let cur=first,passes=0,over=false;const own={};
+  const pn=mk('<div class="bonus"><div class="lab"></div><h2 class="who"></h2><div class="blist"></div><div class="ctl"><button id="bp"></button><button id="bf">Terminer le bonus</button></div></div>');
+  pn.firstChild.textContent='Bonus : +'+String(G.bonus).replace('.',',')+' point par signe cité';
+  const who=pn.querySelector('.who'),bl=pn.querySelector('.blist'),bp=pn.querySelector('#bp'),bf=pn.querySelector('#bf');
+  const lab=()=>{who.textContent=over?'Bonus terminé':G.names[cur]+', cite un signe';bp.textContent='N’en trouve pas → '+G.names[(cur+1)%G.n];bp.hidden=bf.hidden=over};
+  const items=rem.map((s,i)=>{const l=document.createElement('label');l.className='bi';const c=document.createElement('input');c.type='checkbox';const sp=document.createElement('span');sp.textContent=s;const wh=document.createElement('em');l.append(c,sp,wh);
+   c.onchange=()=>{if(c.checked){own[i]=cur;G.sc[cur]+=G.bonus;wh.textContent=' — '+G.names[cur];passes=0;if(Object.keys(own).length<rem.length)cur=(cur+1)%G.n;lab()}else{G.sc[own[i]]-=G.bonus;delete own[i];wh.textContent=''}upd();if(Object.keys(own).length===rem.length)finish()};
+   bl.append(l);return c});
+  function finish(){over=true;items.forEach(c=>c.disabled=true);lab()}
+  bp.onclick=()=>{passes++;if(passes>=G.n){finish();return}cur=(cur+1)%G.n;lab()};
+  bf.onclick=finish;
+  lab();ct.before(pn);G.key=null}
+ let pts=0;
+ function win(i){if(done)return;pts=val();G.sc[i]+=pts;end(i)}
+ d.querySelector('#gv').onclick=()=>end(null);
+ nx.onclick=add;
+ if(G.auto){const st=d.querySelector('#sp');st.hidden=false;st.textContent='Lecture : '+G.auto+' mots par minute';G.tm=setInterval(()=>{if(done)return;left-=0.25;if(left<=0){if(shown<n)add()}},250)}
+ G.key=e=>{if(e.target.tagName==='INPUT')return;if(e.key===' '||e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();add()}else if(/^[1-8]$/.test(e.key)){const i=+e.key-1;if(i<G.n&&!locked[i])win(i)}};
+ show(d);go(1)}
+function final(){clearInterval(G.tm);G.key=null;const d=mk('<div class="stage"><div class="lab">Scores finaux</div><ol class="rank"></ol><div class="ctl"><button class="p nx" id="a">Nouvelle partie</button></div></div>');
+ const o=G.names.map((n,i)=>({n,s:G.sc[i]})).sort((a,b)=>b.s-a.s);
+ d.querySelector('.rank').innerHTML=o.map(x=>'<li style="font-size:1.4rem"><span>'+esc(x.n)+'</span><span class="sc">'+x.s+' pt</span></li>').join('');
+ d.querySelector('#a').onclick=setup;show(d)}
+document.addEventListener('keydown',e=>{if(G.key)G.key(e)});
+setup();
+</script>
+
+</body>
+</html>
