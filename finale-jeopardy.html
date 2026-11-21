@@ -112,7 +112,7 @@ label{font-weight:600;font-size:.9rem}
 <main>
 <header>
 <h1>Jeopardy sur les signes d’affections</h1>
-<div class="intro"><b>Règles du jeu</b><ul><li>Tu es le présentateur : cet écran est pour toi seul, les joueurs ne font qu’écouter ta voix.</li><li>Lis les indices à voix haute et coche le joueur qui trouve l’affection.</li><li>Plus il répond tôt, plus il marque de points : 4, 3, 2 ou 1 point.</li><li>Ensuite, chaque joueur cite à tour de rôle un autre signe : coche-le, il vaut +0,5 point. Si un joueur n’en trouve pas, la main passe au suivant ; le bonus s’arrête quand tous les signes sont cités ou que personne n’en trouve plus.</li><li>En mode manuel, clique sur le texte (ou appuie sur Espace) pour passer à l’indice suivant.</li></ul></div>
+<div class="intro"><b>Règles du jeu</b><ul><li>Tu es le présentateur : cet écran est pour toi seul, les joueurs ne font qu’écouter ta voix.</li><li>Lis les indices à voix haute et coche le joueur qui trouve l’affection.</li><li>Plus il répond tôt, plus il marque de points : 4, 3, 2 ou 1 point.</li><li>Ensuite, chaque joueur cite à tour de rôle un autre signe : coche-le, il vaut +0,5 point. Si un joueur n’en trouve pas, la main passe au suivant ; le bonus s’arrête quand tous les signes sont cités ou que personne n’en trouve plus.</li><li>En mode manuel, clique sur le texte pour passer à l’indice suivant.</li></ul></div>
 </header>
 <section id="v"></section>
 </main>
@@ -142,7 +142,7 @@ function next(){clearInterval(G.tm);G.key=null;G.b=pick();G.q++;
 function play(){
  const b=G.b,n=b.clues.length;let shown=0,locked=G.names.map(()=>false),done=false,paused=false,left=0;
  const val=()=>4-Math.floor((shown-1)*4/n);
- const d=mk('<div class="stage"><div class="top"><span class="lab">Catégorie : <span id="c"></span></span><span class="keys">Espace : indice suivant · clic sur le texte : indice suivant · 1-8 : joueur qui trouve</span></div><div class="hostans"><span>Réponse (pour toi seul) :</span><b id="an"></b></div><div class="lab">À lire à voix haute (la phrase en orange est celle que tu lis ; les points en dépendent)</div><p class="para" id="pa"></p><div class="worth"><span id="pv"></span><small>points en jeu</small></div><div class="players" id="pl"></div><div class="ctl"><button class="p nx" id="nx">Indice lu, suivant</button><span class="keys" id="sp" hidden></span><button id="gv">Personne n’a trouvé</button></div></div>');
+ const d=mk('<div class="stage"><div class="top"><span class="lab">Catégorie : <span id="c"></span></span><span class="keys">Clic sur le texte : indice suivant · 1-8 : joueur qui trouve</span></div><div class="hostans"><span>Réponse (pour toi seul) :</span><b id="an"></b></div><div class="lab">À lire à voix haute (la phrase en orange est celle que tu lis ; les points en dépendent)</div><p class="para" id="pa"></p><div class="worth"><span id="pv"></span><small>points en jeu</small></div><div class="players" id="pl"></div><div class="ctl"><button class="p nx" id="nx">Indice lu, suivant</button><span class="keys" id="sp" hidden></span><button id="gv">Personne n’a trouvé</button></div></div>');
  d.querySelector('#c').textContent=b.th;const pa=d.querySelector('#pa'),pv=d.querySelector('#pv'),pl=d.querySelector('#pl'),an=d.querySelector('#an'),nx=d.querySelector('#nx');
  an.textContent=b.name;
  const pcs=G.names.map((nm,i)=>{const c=mk('<div class="pc"><div class="n"><span></span><span></span></div><div class="row"><button class="ok">A trouvé</button></div></div>');
@@ -183,7 +183,7 @@ function play(){
  d.querySelector('#gv').onclick=()=>end(null);
  nx.onclick=add;
  if(G.auto){const st=d.querySelector('#sp');st.hidden=false;st.textContent='Lecture : '+G.auto+' mots par minute';G.tm=setInterval(()=>{if(done)return;left-=0.25;if(left<=0){if(shown<n)add()}},250)}
- G.key=e=>{if(e.target.tagName==='INPUT')return;if(e.key===' '||e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();add()}else if(/^[1-8]$/.test(e.key)){const i=+e.key-1;if(i<G.n&&!locked[i])win(i)}};
+ G.key=e=>{if(e.target.tagName==='INPUT')return;if(e.key==='ArrowRight'||e.key==='Enter'){e.preventDefault();add()}else if(/^[1-8]$/.test(e.key)){const i=+e.key-1;if(i<G.n&&!locked[i])win(i)}};
  show(d);go(1)}
 function final(){clearInterval(G.tm);G.key=null;const d=mk('<div class="stage"><div class="lab">Scores finaux</div><ol class="rank"></ol><div class="ctl"><button class="p nx" id="a">Nouvelle partie</button></div></div>');
  const o=G.names.map((n,i)=>({n,s:G.sc[i]})).sort((a,b)=>b.s-a.s);
