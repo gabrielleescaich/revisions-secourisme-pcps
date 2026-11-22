@@ -43,6 +43,7 @@ ul.ans li{padding-left:2px}
 .grade .ko{border-color:var(--ko);color:var(--ko)}
 .nav{display:flex;gap:8px;justify-content:space-between;align-items:center}
 .nav button{flex:none}
+#gauge{display:flex;flex-direction:column;gap:8px;margin:6px 0 10px}.gr{display:grid;grid-template-columns:78px 1fr 64px;align-items:center;gap:10px;font-size:.85rem;font-weight:600}.gr .tr{height:16px;border-radius:8px;background:var(--line);overflow:hidden}.gr .fl{height:100%;border-radius:8px;transition:width .3s}.gr.y .fl{background:var(--ok)}.gr.n .fl{background:var(--ko)}.gr.y{color:var(--ok)}.gr.n{color:var(--ko)}.gr .v{text-align:right;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){.flip{transition:none}}
 </style>
 </head>
@@ -61,6 +62,7 @@ ul.ans li{padding-left:2px}
    <button id="rst">Recommencer</button>
   </div>
  </div>
+ <div id="gauge"></div>
  <div class="stage"><button class="flip" id="flip" aria-live="polite"></button></div>
  <div class="grade" id="grade" hidden>
   <button class="ko" id="no">À revoir</button>
@@ -82,13 +84,21 @@ function tabs(){
  DATA.forEach((t,i)=>{const b=document.createElement('button');b.className='tab';b.setAttribute('role','tab');b.setAttribute('aria-selected',i===cur);
   b.textContent=t.cat+' ('+t.items.length+')';b.onclick=()=>{cur=i;idx=0;onlyMissed=false;render();};$('tabs').appendChild(b);});
 }
+function gauge(){
+ const s=S[cur],n=DATA[cur].items.length;let y=0,k=0;
+ for(let i=0;i<n;i++){const v=s.res[i];if(v===1)y++;else if(v===0)k++}
+ const row=(c,l,v)=>'<div class="gr '+c+'"><span>'+l+'</span><div class="tr"><div class="fl" style="width:'+(100*v/n)+'%"></div></div><span class="v">'+v+' / '+n+'</span></div>';
+ const g=$('gauge');g.innerHTML=row('y','Sues',y)+row('n','À revoir',k);
+ g.setAttribute('aria-label',y+' sues et '+k+' à revoir sur '+n+' cartes');
+}
 function render(){
- tabs();const d=deck(),s=S[cur];
+ tabs();const d=deck(),s=S[cur];gauge();
  $('only').textContent=onlyMissed?'Toutes les cartes':'Revoir les ratées';
  $('only').disabled=!onlyMissed&&!Object.values(s.res).includes(0);
  const f=$('flip');f.classList.remove('on');$('grade').hidden=true;
  if(!d.length){f.innerHTML='<div class="face"><p class="q">Aucune carte à revoir.</p></div>';$('cnt').textContent='0 / 0';$('stat').textContent='';$('prev').disabled=$('next').disabled=true;return;}
  if(idx>=d.length)idx=d.length-1;
+ gauge();
  const it=DATA[cur].items[d[idx]];
  f.innerHTML='';
  const fr=document.createElement('div');fr.className='face front';
