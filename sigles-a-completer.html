@@ -21,6 +21,7 @@ button,select{font:inherit;color:var(--ink);background:var(--surf);border:1px so
 button:hover{border-color:var(--acc)}
 button.p{background:var(--acc);border-color:var(--acc);color:var(--accfg)}
 #score{margin-left:auto;font-weight:600}
+.gauge-row{display:grid;grid-template-columns:72px 1fr 64px;align-items:center;gap:10px;font-size:.85rem;font-weight:600;margin-top:8px}.gauge-row .tr{height:14px;border-radius:7px;background:var(--line);overflow:hidden}.gauge-row .fl{height:100%;border-radius:7px;transition:width .3s}.gauge-row.y{color:var(--ok)}.gauge-row.y .fl{background:var(--ok)}.gauge-row.n{color:var(--bad)}.gauge-row.n .fl{background:var(--bad)}.gauge-row .v{text-align:right;font-variant-numeric:tabular-nums}
 .pg{height:6px;background:var(--line);border-radius:3px;margin-top:8px;overflow:hidden}
 .pg i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
 .row{display:grid;grid-template-columns:110px 1fr auto;gap:10px;align-items:center;background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:8px}
@@ -71,7 +72,7 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 <label><input type="checkbox" id="only"> Non réussis seulement</label>
 <span id="score">0 / 0</span>
 </div>
-<div class="pg"><i id="bar"></i></div>
+<div id="gauge"></div>
 </div>
 <div class="done" id="done">Bravo, tous les sigles de cette catégorie sont trouvés !</div>
 <div id="list"></div>
@@ -112,7 +113,8 @@ function check(r,rev){
 function upd(){
   const g=G(),n=g.rows.filter(r=>r._st===1).length,tot=g.items.length;
   $('score').textContent=n+' / '+tot;
-  $('bar').style.width=(100*n/tot)+'%';
+  const ko=g.rows.filter(r=>r._st===2).length;const row=(c,l,v)=>'<div class="gauge-row '+c+'"><span>'+l+'</span><div class="tr"><div class="fl" style="width:'+(100*v/tot)+'%"></div></div><span class="v">'+v+' / '+tot+'</span></div>';
+  $('gauge').innerHTML=row('y','Réussis',n)+row('n','Ratés',ko);
   $('done').style.display=n===tot?'block':'none';
   const only=$('only').checked;g.rows.forEach(r=>r.style.display=(only&&r._st===1)?'none':'');
 }

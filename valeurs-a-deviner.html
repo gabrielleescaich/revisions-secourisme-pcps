@@ -30,6 +30,8 @@ input.n.ko{border-color:var(--ko);background:var(--kobg);color:var(--ko)}
 .sol{font-size:.8rem;color:var(--ko);font-variant-numeric:tabular-nums}
 .col{flex:none;display:inline-flex;flex-direction:column;align-items:center;gap:2px}
 @media(max-width:480px){.card{padding:14px 10px}}
+.gauge-row{display:grid;grid-template-columns:72px 1fr 90px;align-items:center;gap:10px;font-size:.85rem;font-weight:600}.gauge-row .tr{height:14px;border-radius:7px;background:var(--line);overflow:hidden}.gauge-row .fl{height:100%;border-radius:7px;transition:width .3s}.gauge-row.y{color:var(--ok)}.gauge-row.y .fl{background:var(--ok)}.gauge-row.n{color:var(--ko)}.gauge-row.n .fl{background:var(--ko)}.gauge-row .v{text-align:right;font-variant-numeric:tabular-nums}
+#gauge{display:flex;flex-direction:column;gap:8px}
 h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwYjRmOWUiLz48cGF0aCBkPSJNNDQuMyAyMS43QTE2IDE2IDAgMSAwIDQ4IDMySDM0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmNzkzMWUiIHN0cm9rZS13aWR0aD0iOCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjwvc3ZnPg==">
@@ -50,6 +52,7 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
   </div>
   <div class="score" id="sc" aria-live="polite"></div>
  </div>
+ <div id="gauge"></div>
  <div id="cards" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <script>
@@ -111,7 +114,10 @@ function build(){
  });
  score();
 }
-function score(t){setTimeout(()=>window.fit&&fit(),0);document.getElementById('sc').textContent=t||('0 / '+inputs.length+' valeurs');}
+function gauge(){const tot=inputs.length||1,ok=inputs.filter(e=>e.classList.contains('ok')).length,ko=inputs.filter(e=>e.classList.contains('ko')).length;
+ const row=(c,l,n)=>'<div class="gauge-row '+c+'"><span>'+l+'</span><div class="tr"><div class="fl" style="width:'+(100*n/tot)+'%"></div></div><span class="v">'+n+' / '+inputs.length+'</span></div>';
+ document.getElementById('gauge').innerHTML=row('y','Justes',ok)+row('n','Fausses',ko);}
+function score(t){gauge();setTimeout(()=>window.fit&&fit(),0);document.getElementById('sc').textContent=t||('0 / '+inputs.length+' valeurs');}
 document.getElementById('chk').onclick=()=>{
  let ok=0;
  inputs.forEach(e=>{
