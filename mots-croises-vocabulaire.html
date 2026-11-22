@@ -65,7 +65,8 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 <h1>Mots croisés : vocabulaire</h1>
 <p class="sub">Trouve le terme correspondant à chaque définition. Accents et tirets ne comptent pas (Latéro-thoracique s’écrit LATEROTHORACIQUE).</p>
 <div id="tools">
-<label>Taille <select id="size"><option value="8">Courte (8 mots)</option><option value="12">Moyenne (12 mots)</option><option value="19" selected>Complète (19 mots)</option></select></label>
+<label>Type de vocabulaire <select id="type"></select></label>
+<label>Taille <select id="size"></select></label>
 <button class="p" id="new">Nouvelle grille</button>
 <button id="chk">Vérifier</button>
 <button id="hint">Révéler la lettre</button>
@@ -94,7 +95,7 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 </div>
 <input id="kb" autocomplete="off" autocapitalize="characters" aria-hidden="true" tabindex="-1">
 <script>
-const WORDS=[{"a": "VASODILATATION", "q": "Augmentation de la taille des vaisseaux sanguins (veines et artères)"}, {"a": "ICTERE", "q": "Coloration jaune de la peau et des muqueuses"}, {"a": "MYOSIS", "q": "Contraction de la pupille"}, {"a": "LATEROTHORACIQUE", "q": "Côté du thorax"}, {"a": "RETROSTERNAL", "q": "Derrière le sternum"}, {"a": "MYDRIASE", "q": "Dilatation de la pupille"}, {"a": "EPISTAXIS", "q": "Ecoulement de sang par le nez"}, {"a": "OTTORAGIE", "q": "Ecoulement de sang par les oreilles"}, {"a": "PRIAPISME", "q": "Erection non controlée et ne cédant pas"}, {"a": "HYPEROXIE", "q": "Augmentation trop importante de la concentration d’oxygène dans le sang"}, {"a": "HYPOXIE", "q": "Manque d’oxygène / baisse trop importante de la quantité d’oxygène dans le sang"}, {"a": "HEMOSTASE", "q": "Mécanismes d’arrêt du saignement du corps humain"}, {"a": "MEDIOTHORACIQUE", "q": "Milieu du thorax"}, {"a": "ANISOCORIE", "q": "Pupilles de taille asymétrique"}, {"a": "ANAPHYLAXIE", "q": "Réaction allergique grave"}, {"a": "PRECORDIAL", "q": "Région du thorax située en avant du coeur"}, {"a": "TRANSFIXIANTE", "q": "Traversant"}, {"a": "ARYTHMIE", "q": "Variation du rythme cardiaque"}, {"a": "HEMORRAGIEEXTERIORISEE", "q": "Épanchement de sang à l’intérieur de l’organisme qui s’extériorise par un orifice naturel (oreille, nez, bouche, voies urinaires, anus, vagin)"}];
+const WORDS=[{"a": "ANAPHYLAXIE", "q": "Réaction allergique grave", "t": "références techniques nationales"}, {"a": "ANISOCORIE", "q": "Pupilles de taille asymétrique", "t": "termes médicaux utilisés dans les bilans"}, {"a": "ARYTHMIE", "q": "Variation du rythme cardiaque", "t": "termes médicaux utilisés dans les bilans"}, {"a": "CEPHALEES", "q": "Maux de tête", "t": "termes médicaux utilisés dans les bilans"}, {"a": "EMBARRURE", "q": "Fracture de la boîte crânienne avec enfoncement", "t": "termes médicaux utilisés dans les bilans"}, {"a": "EPISTAXIS", "q": "Ecoulement de sang par le nez", "t": "termes médicaux utilisés dans les bilans"}, {"a": "HEMORRAGIEEXTERIORISEE", "q": "Épanchement de sang à l'intérieur de l'organisme qui s'extériorise par un orifice naturel (oreille, nez, bouche, voies urinaires, anus, vagin)", "t": "références techniques nationales"}, {"a": "HEMOSTASE", "q": "Mécanismes d'arrêt du saignement du corps humain", "t": "références techniques nationales"}, {"a": "HYPEROXIE", "q": "Augmentation trop importante de la concentration d'oxygène dans le sang", "t": "termes médicaux utilisés dans les bilans"}, {"a": "HYPERTENSION", "q": "Augmentation trop impotante de la tension artérielle", "t": "termes médicaux utilisés dans les bilans"}, {"a": "HYPOTENSION", "q": "Baisse trop impotante de la tension artérielle", "t": "termes médicaux utilisés dans les bilans"}, {"a": "HYPOXIE", "q": "Manque d'oxygène / baisse trom importante de la quantité d'oxygène dans le sang", "t": "termes médicaux utilisés dans les bilans"}, {"a": "ICTERE", "q": "Coloration jaune de la peau et des muqueuses", "t": "termes médicaux utilisés dans les bilans"}, {"a": "LATEROTHORACIQUE", "q": "Côté du thorax", "t": "termes médicaux utilisés dans les bilans"}, {"a": "MEDIOTHORACIQUE", "q": "Milieu du thorax", "t": "termes médicaux utilisés dans les bilans"}, {"a": "MYDRIASE", "q": "Dilatation de la pupille", "t": "termes médicaux utilisés dans les bilans"}, {"a": "MYOSIS", "q": "Contraction de la pupille", "t": "termes médicaux utilisés dans les bilans"}, {"a": "OTORRAGIE", "q": "Ecoulement de sang par les oreilles", "t": "termes médicaux utilisés dans les bilans"}, {"a": "PRECORDIAL", "q": "Région du thorax située en avant du coeur", "t": "références techniques nationales"}, {"a": "PRIAPISME", "q": "Erection non controlée et ne cédant pas", "t": "termes médicaux utilisés dans les bilans"}, {"a": "RETROSTERNAL", "q": "Derrière le sternum", "t": "termes médicaux utilisés dans les bilans"}, {"a": "TRANSFIXIANTE", "q": "Traversant", "t": "termes médicaux utilisés dans les bilans"}, {"a": "VASODILATATION", "q": "Augmentation de la taille des vaisseaux sanguins (veines et artères)", "t": "termes médicaux utilisés dans les bilans"}, {"a": "AVC", "q": "Déficit neurologique soudain d’origine vasculaire (la circulation sanguine d’une partie du cerveau est interrompue)", "t": "références techniques nationales"}, {"a": "GELURE", "q": "Lésions de la peau et des tissus sous-jacents provoquées par un refroidissement local intense suite à une exposition prolongée au froid", "t": "références techniques nationales"}, {"a": "INTOXICATION", "q": "Trouble engendré par la pénétration dans l’organisme d’une substance appelée poison ou toxique", "t": "références techniques nationales"}, {"a": "STRANGULATION", "q": "Constriction du cou ou pression sur la gorge", "t": "références techniques nationales"}, {"a": "BLAST", "q": "Lésions anatomiques générées à la suite d’une forte explosion", "t": "références techniques nationales"}];
 //GEN-START
 
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -158,10 +159,24 @@ const $=id=>document.getElementById(id);
 const touch=matchMedia('(pointer:coarse)').matches;
 const mob=()=>innerWidth<=820;
 if(touch)document.body.classList.add('osk');
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const TYPES=[...new Set(WORDS.map(w=>w.t))];
+const poolW=()=>$('type').value==='*'?WORDS:WORDS.filter(w=>w.t===$('type').value);
+function fillSizes(){
+  const n=poolW().length,s=$('size'),old=s.value;s.innerHTML='';
+  [[8,'Courte'],[12,'Moyenne']].forEach(([k,l])=>{if(n>k){const o=document.createElement('option');o.value=k;o.textContent=l+' ('+k+' mots)';s.appendChild(o)}});
+  const o=document.createElement('option');o.value=n;o.textContent='Complète ('+n+' mot'+(n>1?'s':'')+')';s.appendChild(o);
+  s.value=[...s.options].some(x=>x.value===old)?old:o.value;
+}
+function fillTypes(){
+  const s=$('type');s.innerHTML='';
+  const o=document.createElement('option');o.value='*';o.textContent='Tous les types ('+WORDS.length+' mots)';s.appendChild(o);
+  TYPES.forEach(t=>{const x=document.createElement('option');x.value=t;x.textContent=cap(t)+' ('+WORDS.filter(w=>w.t===t).length+')';s.appendChild(x)});
+}
 let cells,entries,sel,lastW=innerWidth;
 function maxCols(){return mob()?Math.max(9,Math.min(16,Math.floor((innerWidth-24)/27))):44}
 function build(){
-  const b=generate(WORDS,+$('size').value,1500,maxCols());
+  const pool=poolW(),b=generate(pool,Math.min(+$('size').value,pool.length),1500,maxCols());
   cells=Array.from({length:b.R},()=>Array.from({length:b.C},()=>null));
   entries=b.placed.map(e=>({a:e.a,clue:e.q,r:e.r-b.r0,c:e.c-b.c0,d:e.d,len:e.a.length}));
   entries.forEach((e,i)=>{for(let k=0;k<e.len;k++){
@@ -178,7 +193,7 @@ function build(){
   render();
   const f=entries.filter(e=>e.d===0).sort((p,q)=>p.n-q.n)[0]||entries[0];
   sel={r:f.r,c:f.c,d:f.d};paint();
-  $('msg').textContent='';
+  $('msg').textContent=entries.length<Math.min(+$('size').value,pool.length)?'Seuls '+entries.length+' mots sur '+Math.min(+$('size').value,pool.length)+' se croisent dans cette grille : clique sur « Nouvelle grille » pour en tirer une autre.':'';
   $('defs').querySelector('summary').textContent='Toutes les définitions ('+entries.length+')';
 }
 function render(){
@@ -311,12 +326,14 @@ $('pv').onclick=()=>{nextWord(-1);focusKb()};
 $('nx').onclick=()=>{nextWord(1);focusKb()};
 $('new').onclick=()=>{build();focusKb()};
 $('size').onchange=build;
+$('type').onchange=()=>{fillSizes();build();focusKb()};
 $('chk').onclick=check;
 $('hint').onclick=hint;
 $('rev').onclick=()=>{cells.forEach(row=>row.forEach(x=>{if(x){x.v=x.ch;x.bad=false}}));paint();win()};
 $('clr').onclick=()=>{cells.forEach(row=>row.forEach(x=>{if(x){x.v='';x.bad=false}}));paint();$('msg').textContent=''};
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(cells&&innerWidth!==lastW){lastW=innerWidth;const s={...sel};render();sel=s;paint()}},200)});
 if(mob())$('defs').open=false;
+fillTypes();fillSizes();
 build();
 </script>
 </body>
