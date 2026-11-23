@@ -199,7 +199,7 @@ function fillTypes(){
 let cells,entries,sel,lastW=innerWidth;
 function maxCols(){return mob()?Math.max(9,Math.min(16,Math.floor((innerWidth-24)/27))):44}
 const SRCS={'références techniques nationales PSE':'<a href="https://drloser123.github.io/referentiel-pse/" target="_blank" rel="noopener">Références techniques nationales PSE&nbsp;↗</a>','termes médicaux utilisés dans les bilans (CE)':'E-learning CE PCPS'};
-function srcUpd(){const v=$('type').value,L=v==='*'?Object.values(SRCS):[SRCS[v]].filter(Boolean);$('src').innerHTML=L.length?(L.length>1?'Sources :<br>':'Source : ')+L.join(L.length>1?'<br>':''):'';}
+function srcUpd(){const v=$('type').value,L=v==='*'?Object.values(SRCS).map(s=>s==='E-learning CE PCPS'?'E-learning CE PCPS (pour les termes médicaux utilisés dans les bilans)':s):[SRCS[v]].filter(Boolean);$('src').innerHTML=L.length?(L.length>1?'Sources :<br>':'Source : ')+L.join(L.length>1?'<br>':''):'';}
 function build(){
   srcUpd();
   const pool=poolW(),b=generate(pool,Math.min(+$('size').value,pool.length),1500,maxCols());
