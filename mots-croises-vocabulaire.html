@@ -174,9 +174,13 @@ const TYPES=[...new Set(WORDS.map(w=>w.t))];
 const poolW=()=>$('type').value==='*'?WORDS:WORDS.filter(w=>w.t===$('type').value);
 function fillSizes(){
   const n=poolW().length,s=$('size'),old=s.value;s.innerHTML='';
-  [[8,'Courte'],[12,'Moyenne']].forEach(([k,l])=>{if(n>k){const o=document.createElement('option');o.value=k;o.textContent=l+' ('+k+' mots)';s.appendChild(o)}});
-  const o=document.createElement('option');o.value=n;o.textContent='Complète ('+n+' mot'+(n>1?'s':'')+')';s.appendChild(o);
-  s.value=[...s.options].some(x=>x.value===old)?old:o.value;
+  const add=(k,l)=>{const o=document.createElement('option');o.value=k;o.textContent=l+' ('+k+' mot'+(k>1?'s':'')+')';s.appendChild(o);return o};
+  let last;
+  if(n>5)add(5,'Courte');
+  if(n>15)add(15,'Moyenne');
+  last=add(Math.min(25,n),'Longue');
+  if(n<=5)last.textContent='Longue ('+n+' mot'+(n>1?'s':'')+')';
+  s.value=[...s.options].some(x=>x.value===old)?old:last.value;
 }
 function fillTypes(){
   const s=$('type');s.innerHTML='';
@@ -203,7 +207,7 @@ function build(){
   render();
   const f=entries.filter(e=>e.d===0).sort((p,q)=>p.n-q.n)[0]||entries[0];
   sel={r:f.r,c:f.c,d:f.d};paint();
-  $('msg').textContent=entries.length<Math.min(+$('size').value,pool.length)?'Seuls '+entries.length+' mots sur '+Math.min(+$('size').value,pool.length)+' se croisent dans cette grille : clique sur « Nouvelle grille » pour en tirer une autre.':'';
+  $('msg').textContent='';
   $('defs').querySelector('summary').textContent='Toutes les définitions ('+entries.length+')';
 }
 function render(){
