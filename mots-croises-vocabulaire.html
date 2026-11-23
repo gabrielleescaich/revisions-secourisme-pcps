@@ -51,7 +51,7 @@ body.osk #osk{display:block}
 #osk .r{display:flex;gap:4px;margin-bottom:5px}
 #osk button{flex:1;height:44px;padding:0;font-size:1.1rem;font-weight:600;background:var(--key);border-color:transparent;border-radius:6px;user-select:none;-webkit-user-select:none}
 #osk button.w15{flex:1.5}
-#osk .ra button{font-size:.78rem;padding:0 2px;font-weight:500;background:var(--surf);border-color:var(--line);height:38px}
+#osk .ra button{line-height:1.1;font-size:.72rem;padding:0 2px;font-weight:500;background:var(--surf);border-color:var(--line);height:38px}
 #osk button:active{background:var(--accs)}
 h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 #ct{border-left-color:#f7931e}
@@ -63,6 +63,12 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 @media (max-width:820px){#acts{display:none}#cur{top:env(safe-area-inset-top,0px)}}
 #tools select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 #tools{align-items:flex-end;gap:12px}
+#acts{background:var(--accs);border:2px solid var(--acc);border-radius:12px;padding:8px 10px;box-shadow:0 4px 10px rgba(0,0,0,.15);border-bottom:2px solid var(--acc)}
+#acts button{font-weight:700;border:2px solid var(--ink);min-height:44px}
+#acts button.p{border-color:var(--acc)}
+#osk .r.ra{background:var(--accs);border-radius:10px;padding:4px;margin-bottom:6px;box-shadow:inset 0 -3px 0 #f7931e}
+#osk .ra button{font-weight:700;border:2px solid var(--ink);background:var(--surf)}
+#osk .ra button[data-a=new]{background:var(--acc);border-color:var(--acc);color:#fff}
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMwYjRmOWUiLz48cGF0aCBkPSJNNDQuMyAyMS43QTE2IDE2IDAgMSAwIDQ4IDMySDM0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmNzkzMWUiIHN0cm9rZS13aWR0aD0iOCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjwvc3ZnPg==">
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEQUlEQVR4AbxXbVBUVRh+zmGh3CUCIlQsRAsmZLRFG0gnnUxaRgi3ZrRRZiKEyf/OWNM4jR/ZjDaj9aNszFV0LHAmp1CYbET60hoDMdGkbC1aqdWWAXfxYwVZ9nrehd25R+7dCwru3HfveZ/3Pc/zzL333LPLof68vCfRbK/aaLbvPmKxV3lEKGMUHrPgJG4IDbVkxIC5ZPdiczDYxoB1DMwmmlJFjNWRSpxMcJMGaYWJQwYs9qpCxtlhxlhauDBeZ9IgrbAJjuLqJAXKnvES1OVl2IXCXcl8Au99nYFN1m0cpwJdiQlxrIxzzp4dJw1DWtLm4vKP2ABnQbz4yJ/YnHUYR/M+hWfRRnQsfA8n5n4Ex8wDsKU4QT2GykMNpM3F5Z86lEc9lU85iXPzt2F/7n68kd6M3ITLiGEKzDEBZFq68crENtRYa9AkzCxJbYvKFS6SdmgVhAGts4kFUPN0NbZmf43UuBtaLRI2zexF1awD+DC7TuCKiOiHoYFNmQ2wPXohOotG9bUpv6JMhEZJgqIaKBD3lC63ekbvgAl7/5uDirPLkPH923jqxzexvLUU2y/OU7dhZ0ce9rnnSJhWwrVAwhiC2JR5hIaRIPEVQmzN+RLUdebg+sCD6Oq3oLErC+sv2FAqajcCsVjntGGtsygyL9pA18Crk8+GHq7w5AGFofTMChz3Tg9Dw84Nwoj1p9X4pGPesJoeoG9g0hlpznfdT+LYlSckTCvxBsxasC6ma8CacEmaVO3OlXJ10lWwAUYBaK8ITQO09B6O7VNrwOlPkfLRJ0xziqaBgGIa1pwUe3MYNlKgp/8B3VZNA9Tt8ifRKRLJprs3cKkvIcJz50DXwM/eDKl3qVgVEqBKUho3QB0O8Q5QlXGq5zF1Ko11DdR1ZkuN9om/hzYiCdRI8hMvojTttFSp88yQcnWia+Db7iz8dm2SuheOWV+K1+spCVMnzyW24wvr57CY+iPwtUAcjnmnRfI7B7oGqPGt80VQVKsnPuYWPsiuR+3svbA+5KYWxMf0ip3RjY9n1OLgM/skcWrY/PciaD3UVKOIauBkTzreb3+e+qSYn+xCY74jtPZdC7fgaJ4Dy9PkFxdN+Or/HOz8N5+GuhHVAM3a9s8CbHfNpeGoYmv7Aqw6t8xwjqEBBRzr/ypESUs5Wq+mGRI2+dJR3LISW9pfMOylBi5usocGRnHCl4GC5lV4SZDv6MjHD93TcbkvXuyIcWj2PY7P3LNBu2FxSwWafFON6AbriuLhCmOtg9nIvn8R5O84F2Pp6TLMPL5G/CZYi6KWSqz+YwloNxwZy2AXaXPxkI/KwODUsfkmbS5c7BB0PhH3+/CRNu89uNIVhFJxv9WVIMpJm5PwzUOVtUpQKVIURf4RQMUxDtIgLX99xSGiDhmggb++8hs/5znivrwr/jA0CKxTxD0fQwSdxEncpEFaQzhuAwAA///1aYzUAAAABklEQVQDANnxjLwM2ax6AAAAAElFTkSuQmCC">
@@ -98,7 +104,7 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 </div>
 </main>
 <div id="osk" role="group" aria-label="Clavier">
-<div class="r ra"><button data-a="new">Nouvelle</button><button data-a="chk">Vérifier</button><button data-a="hint">Indice</button><button data-a="rev">Tout révéler</button><button data-a="clr">Effacer</button></div>
+<div class="r ra"><button data-a="new">Nouvelle grille</button><button data-a="chk">Vérifier</button><button data-a="hint">Indice</button><button data-a="rev">Tout révéler</button><button data-a="clr">Effacer</button></div>
 <div class="r" data-r="AZERTYUIOP"></div>
 <div class="r" data-r="QSDFGHJKLM"></div>
 <div class="r" data-r="↔WXCVBN⌫"></div>
