@@ -51,15 +51,16 @@ body.osk #osk{display:block}
 #osk .r{display:flex;gap:4px;margin-bottom:5px}
 #osk button{flex:1;height:44px;padding:0;font-size:1.1rem;font-weight:600;background:var(--key);border-color:transparent;border-radius:6px;user-select:none;-webkit-user-select:none}
 #osk button.w15{flex:1.5}
-#osk .ra button{font-size:.9rem;font-weight:500;background:var(--surf);border-color:var(--line);height:38px}
+#osk .ra button{font-size:.78rem;padding:0 2px;font-weight:500;background:var(--surf);border-color:var(--line);height:38px}
 #osk button:active{background:var(--accs)}
 h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 #ct{border-left-color:#f7931e}
 #tools label{display:flex;flex-direction:column;gap:4px;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
 #tools select{min-height:48px;font-size:1rem;font-weight:700;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--accs);border:2px solid var(--acc);border-radius:10px;padding:8px 36px 8px 12px;box-shadow:inset 0 -4px 0 #f7931e;max-width:100%}
-@media (max-width:820px){#tools{display:flex}#tools>label{flex:1 1 140px;min-width:0}#tools select{width:100%;min-width:0}#tools button{display:none}#tools.show button{display:inline-block}}
-#tools .br{flex:0 0 100%;height:0}
-@media (max-width:820px){#tools .br{display:none}}
+@media (max-width:820px){#tools{display:flex}#tools>label{flex:1 1 140px;min-width:0}#tools select{width:100%;min-width:0}}
+#acts{display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:env(safe-area-inset-top,0px);z-index:25;background:var(--bg);padding:8px 0;margin-bottom:4px;border-bottom:1px solid var(--line)}
+#cur{top:calc(env(safe-area-inset-top,0px) + var(--ah,0px))}
+@media (max-width:820px){#acts{display:none}#cur{top:env(safe-area-inset-top,0px)}}
 #tools select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 #tools{align-items:flex-end;gap:12px}
 </style>
@@ -74,7 +75,8 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 <div id="tools">
 <label>Type de vocabulaire <select id="type"></select></label>
 <label>Taille <select id="size"></select></label>
-<span class="br" aria-hidden="true"></span>
+</div>
+<div id="acts">
 <button class="p" id="new">Nouvelle grille</button>
 <button id="chk">Vérifier</button>
 <button id="hint">Révéler la lettre</button>
@@ -96,7 +98,7 @@ h1{border-bottom:4px solid #f7931e;padding-bottom:6px}
 </div>
 </main>
 <div id="osk" role="group" aria-label="Clavier">
-<div class="r ra"><button data-a="chk">Vérifier</button><button data-a="hint">Indice</button><button data-a="opt">Options</button></div>
+<div class="r ra"><button data-a="new">Nouvelle</button><button data-a="chk">Vérifier</button><button data-a="hint">Indice</button><button data-a="rev">Tout révéler</button><button data-a="clr">Effacer</button></div>
 <div class="r" data-r="AZERTYUIOP"></div>
 <div class="r" data-r="QSDFGHJKLM"></div>
 <div class="r" data-r="↔WXCVBN⌫"></div>
@@ -328,7 +330,7 @@ document.querySelectorAll('#osk .r[data-r]').forEach(row=>{
 });
 document.querySelectorAll('#osk [data-a]').forEach(b=>b.onclick=()=>{
   const a=b.dataset.a;
-  if(a==='chk')check();else if(a==='hint')hint();else $('tools').classList.toggle('show');
+  if(a==='chk')check();else if(a==='hint')hint();else if(a==='new'){build();}else if(a==='rev')$('rev').click();else if(a==='clr')$('clr').click();
 });
 $('pv').onclick=()=>{nextWord(-1);focusKb()};
 $('nx').onclick=()=>{nextWord(1);focusKb()};
@@ -339,6 +341,7 @@ $('chk').onclick=check;
 $('hint').onclick=hint;
 $('rev').onclick=()=>{cells.forEach(row=>row.forEach(x=>{if(x){x.v=x.ch;x.bad=false}}));paint();win()};
 $('clr').onclick=()=>{cells.forEach(row=>row.forEach(x=>{if(x){x.v='';x.bad=false}}));paint();$('msg').textContent=''};
+const setAh=()=>document.documentElement.style.setProperty('--ah',(mob()?0:$('acts').offsetHeight)+'px');addEventListener('resize',setAh);setAh();
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(cells&&innerWidth!==lastW){lastW=innerWidth;const s={...sel};render();sel=s;paint()}},200)});
 if(mob())$('defs').open=false;
 fillTypes();fillSizes();
