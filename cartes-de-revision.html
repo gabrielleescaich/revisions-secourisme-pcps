@@ -92,7 +92,7 @@ function gauge(){
  const s=S[cur],n=DATA[cur].items.length;let y=0,k=0;
  for(let i=0;i<n;i++){const v=s.res[i];if(v===1)y++;else if(v===0)k++}
  const row=(c,l,v)=>'<div class="gr '+c+'"><span>'+l+'</span><div class="tr"><div class="fl" style="width:'+(100*v/n)+'%"></div></div><span class="v">'+v+' / '+n+'</span></div>';
- const g=$('gauge');g.innerHTML=row('y','Sues',y)+row('n','À revoir',k);
+ const g=$('gauge');g.innerHTML=row('y','Réussi',y)+row('n','Raté',k);
  g.setAttribute('aria-label',y+' sues et '+k+' à revoir sur '+n+' cartes');
 }
 function render(){

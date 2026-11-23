@@ -114,7 +114,7 @@ function upd(){
   const g=G(),n=g.rows.filter(r=>r._st===1).length,tot=g.items.length;
   $('score').textContent=n+' / '+tot;
   const ko=g.rows.filter(r=>r._st===2).length;const row=(c,l,v)=>'<div class="gauge-row '+c+'"><span>'+l+'</span><div class="tr"><div class="fl" style="width:'+(100*v/tot)+'%"></div></div><span class="v">'+v+' / '+tot+'</span></div>';
-  $('gauge').innerHTML=row('y','Réussis',n)+row('n','Ratés',ko);
+  $('gauge').innerHTML=row('y','Réussi',n)+row('n','Raté',ko);
   $('done').style.display=n===tot?'block':'none';
   const only=$('only').checked;g.rows.forEach(r=>r.style.display=(only&&r._st===1)?'none':'');
 }

@@ -116,7 +116,7 @@ function build(){
 }
 function gauge(){const tot=inputs.length||1,ok=inputs.filter(e=>e.classList.contains('ok')).length,ko=inputs.filter(e=>e.classList.contains('ko')).length;
  const row=(c,l,n)=>'<div class="gauge-row '+c+'"><span>'+l+'</span><div class="tr"><div class="fl" style="width:'+(100*n/tot)+'%"></div></div><span class="v">'+n+' / '+inputs.length+'</span></div>';
- document.getElementById('gauge').innerHTML=row('y','Justes',ok)+row('n','Fausses',ko);}
+ document.getElementById('gauge').innerHTML=row('y','Réussi',ok)+row('n','Raté',ko);}
 function score(t){gauge();setTimeout(()=>window.fit&&fit(),0);document.getElementById('sc').textContent=t||('0 / '+inputs.length+' valeurs');}
 document.getElementById('chk').onclick=()=>{
  let ok=0;
