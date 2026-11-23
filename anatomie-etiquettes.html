@@ -131,7 +131,7 @@ function autoZ(e){
   return AZ[key]=pick;
 }
 D.forEach(g=>g.units.forEach(e=>{const im=new Image();im.onload=()=>{e._ar=im.naturalHeight/im.naturalWidth;for(const k in AZ)delete AZ[k];draw()};im.src=e.img}));
-const zmv=u=>ZM[cur+':'+u]||autoZ(D[cur].units[u]);
+const zmv=u=>ZM[cur+':'+u]||1;
 function draw(){
   const g=D[cur];{const G='Source : PCPS, <i>Guide du secouriste</i>, Premiers secours en équipe niveau 1, 2025',SR={'Respiratoire':G,'Squelette':G,'Colonne':G,'Orientation':'Sources :<br>'+G.slice(9)+'<br>E-learning CE PCPS','Crâne':'Source : E-learning CE PCPS'};$('src').innerHTML=SR[g.tab]||'';}
   const y=scrollY,sx=[...document.querySelectorAll('.sc')].map(s=>s.scrollLeft);
