@@ -104,7 +104,7 @@ function gauge(){
 }
 function render(){
  tabs();const d=deck(),s=S[cur];gauge();
- {const SRC={'Opérationnel':'Source : <a href="https://drloser123.github.io/referentiel-pse/" target="_blank" rel="noopener">Références techniques nationales PSE&nbsp;↗</a>','PSC':'Source : Références techniques nationales PSC','Actions solidaires et sociales':'Source : FR DA-01-10'};$('src').innerHTML=SRC[DATA[cur].cat]||'';}
+ {const SRC={'Opérationnel':'Source : <a href="https://drloser123.github.io/referentiel-pse/" target="_blank" rel="noopener">Références techniques nationales PSE&nbsp;↗</a>','PSC':'Source : Références techniques nationales PSC','Actions solidaires et sociales':'Sources :<br>FR DA-01-10<br>E-learning CE2S<br>Guide du maraudeur PCPS 2020'};$('src').innerHTML=SRC[DATA[cur].cat]||'';}
  $('only').textContent=onlyMissed?'Toutes les cartes':'Revoir les ratées';
  $('only').disabled=!onlyMissed&&!Object.values(s.res).includes(0);
  const f=$('flip');f.classList.remove('on');$('grade').hidden=true;
